@@ -1,0 +1,138 @@
+﻿<Window x:Class="DesktopUI.ReadGameWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DesktopUI"
+        mc:Ignorable="d"
+        Title="{Binding WindowTitle}" Height="525" Width="600" FontSize="14" FontFamily="Microsoft Sans Serif">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Margin="5,0,5,5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" VerticalAlignment="Center">
+                <TextBlock Text="{Binding OgGame.Name}" FontSize="20"/>
+                <TextBlock Text=" (" FontSize="20"/>
+                <TextBlock Text="{Binding OgGame.YearReleased}" FontSize="20"/>
+                <TextBlock Text=") - " FontSize="20"/>
+                <TextBlock Text="{Binding OgGame.Platform, Converter={StaticResource PlatformKeyToNameConverter}}" FontSize="20"/>
+            </StackPanel>
+
+
+            <ListView Grid.Row="1" Grid.ColumnSpan="5" ItemsSource="{Binding RemakeGames}"
+                      BorderBrush="Transparent" BorderThickness="0">
+                <!-- Code that makes default selection dissapear -->
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListBoxItem">
+                                    <ContentPresenter/>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListView.ItemContainerStyle>
+
+            </ListView>
+            
+            <StackPanel Grid.Row="2" Margin="0,5,0,0">
+                <TextBlock Text="{Binding OgGame.Genre1, Converter={StaticResource GenreKeyToNameConverter}}" Margin="0,2,0,0"/>
+            </StackPanel>
+
+            <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Bottom">
+                <TextBlock Text="Beat " Margin="0,0,0,0"/>
+                <TextBlock Text="{Binding TimesBeat}" Margin="0,0,0,0"/>
+                <TextBlock Text=" times" Margin="0,0,0,0"/>
+            </StackPanel>
+
+            <CheckBox Content="My Entries Only" IsChecked="{Binding OnlyShowMine}" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,5,0"/>
+
+        </Grid>
+
+        <Border Grid.Row="2" BorderBrush="Black" BorderThickness="1"/>
+
+        <ListBox Name="playedGamesList" ItemsSource="{Binding PlayedGames}" Grid.Row="3" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+
+            <!-- Code that makes default selection dissapear -->
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListBoxItem">
+                                <ContentPresenter/>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListBox.ItemContainerStyle>
+
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid Margin="4,4,4,8">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="18"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="60"/>
+                                <ColumnDefinition Width="90"/>
+                                <ColumnDefinition Width="140"/>
+                                <ColumnDefinition Width="175"/>
+                                <ColumnDefinition Width="100"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Text="{Binding UserKey, Converter={StaticResource UserKeyToNameConverter}}" Margin="0,0,0,0" FontWeight="Bold" HorizontalAlignment="Left" />
+                            <TextBlock Text="{Binding DateInfoReversed}" Grid.Column="1" Margin="5,0,0,0" FontWeight="Bold"  HorizontalAlignment="Left"/>
+                            <TextBlock Text="{Binding PlatformInfo}" Grid.Column="2" Margin="5,0,0,0" FontWeight="Bold"      HorizontalAlignment="Left"/>
+                            <TextBlock Text="{Binding PercentageInfo}" Grid.Column="3" Margin="5,0,0,0" FontWeight="Bold"    HorizontalAlignment="Left"/>
+                            <TextBlock Text="{Binding HourInfo}" Grid.Column="4" Margin="5,0,0,0" FontWeight="Bold"          HorizontalAlignment="Left"/>
+
+                            <Border BorderBrush="LightGray" BorderThickness="0,0,1,0"/>
+                            <Border BorderBrush="LightGray" BorderThickness="0,0,1,0" Grid.Column="1"/>
+                            <Border BorderBrush="LightGray" BorderThickness="0,0,1,0" Grid.Column="2"/>
+                            <Border BorderBrush="LightGray" BorderThickness="0,0,1,0" Grid.Column="3"/>
+
+
+                        </Grid>
+                        
+                        
+                        <!--<StackPanel Orientation="Horizontal" >
+                            <TextBlock Text="{Binding UserKey, Converter={StaticResource UserKeyToNameConverter}}" Margin="0,0,0,0"  FontWeight="Bold" 
+                                       Visibility="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.OnlyShowMine, Converter={StaticResource BoolToVisConverter}, ConverterParameter=collapsed|visible}"/>
+
+                            <TextBlock Text=" - " Margin="0,0,0,0"  FontWeight="Bold" Visibility="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.OnlyShowMine, Converter={StaticResource BoolToVisConverter}, ConverterParameter=collapsed|visible}"/>
+                            <TextBlock Text="{Binding InfoString}" FontWeight="Bold"/>
+                        </StackPanel>-->
+                        <TextBlock Text="{Binding Memo}" Margin="0,2,0,0" Grid.Row="2" TextWrapping="Wrap"
+                                   FontSize="14"/>
+
+                        <TextBlock Visibility="{Binding Memo, Converter={StaticResource NoMemoVisConverter}}" 
+                                   Text="No memo" Margin="0,2,0,0" Grid.Row="2" FontSize="14" FontStyle="Italic"/>
+
+
+                    </Grid>
+
+
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+    </Grid>
+</Window>

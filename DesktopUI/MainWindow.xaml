@@ -1,0 +1,813 @@
+﻿<Window x:Class="DesktopUI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DesktopUI" 
+        mc:Ignorable="d"
+        Title="{Binding WindowTitle}"  Height="650" Width="1100"
+        FontFamily="Microsoft Sans Serif" FontSize="14" Background="LightGray">
+
+    <Window.Resources>
+        <Style x:Key="HeaderImage" TargetType="{x:Type Image}">
+            <Setter Property="Margin" Value="0,0,0,0" />
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="250"/>
+        </Grid.ColumnDefinitions>
+
+        <Menu Grid.Row="0" Grid.ColumnSpan="2">
+
+            <!-- File -->
+            <MenuItem Header="_File">
+                <MenuItem Header="New Game" />
+                <Separator />
+                <MenuItem Header="Exit"/>
+            </MenuItem>
+            <MenuItem Header="_Tools">
+                <MenuItem Header="Open Game Window" Command="{Binding OpenGamesWindowCommand}" />
+                <Separator />
+                <MenuItem IsCheckable="True" IsChecked="{Binding ShowKeys}" Header="Show Keys"  />
+
+            </MenuItem>
+            <MenuItem Header="_About">
+                <MenuItem Header="Help"/>
+                <Separator />
+                <MenuItem Header="About"/>
+            </MenuItem>
+
+        </Menu>
+
+        <Separator 
+            Grid.Row="1"
+            Margin="0" 
+            Width="auto"/>
+
+        <StackPanel Grid.Column="2" Grid.Row="0" HorizontalAlignment="Right" Orientation="Horizontal" Margin="0,2,2,0" 
+                    Visibility="{Binding UpdateAvailable, Converter={StaticResource BoolToVisConverter}, ConverterParameter=Visible|Hidden}">
+
+            <TextBlock Text="Update available"  FontSize="12" Margin="0,0,0,0"/>
+            <Button Content="Open Website" FontSize="8" Margin="5,0,0,0" Height="16" VerticalAlignment="Top" Command="{Binding OpenDownloadCommand}"/>
+
+        </StackPanel>
+
+        <Border Grid.Row="2" Grid.Column="0" Margin="4,2,4,4"
+                BorderBrush="DarkGray" Background="White" BorderThickness="1">
+            <Grid>
+                <StackPanel Orientation="Horizontal" Margin="2,5,2,5">
+                    <Button Content="{Binding CurrentUser.UserName}" Width="80" FontSize="12" Margin="2,0,2,0" Height="24" Command="{Binding MyProfileCommand}"/>
+                    <Border BorderBrush="DarkGray" BorderThickness="1,0,0,0" Margin="5,0,5,0"/>
+                    <Button Content="Add To Collection" Width="120" Margin="2,0,0,0" Height="24" FontSize="12" Command="{Binding AddToCollectionCommand}"/>
+                    <Button Content="Add To Played" Width="120" Margin="5,0,2,0" Height="24" FontSize="12" Command="{Binding AddToPlayedCommand}"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <TabControl Grid.Row="3" Grid.Column="0" Grid.RowSpan="2" SelectedIndex="{Binding SelectedTabIndex, Mode=TwoWay}" Margin="5,0,5,5">
+            <TabItem Header="Feed" Width="90" DataContext="{Binding FeedVM}">
+                <ListBox Margin="5" HorizontalContentAlignment="Stretch" SelectionMode="Extended"
+                         ItemsSource="{Binding FeedList}" Background="Transparent" BorderBrush="Transparent" BorderThickness="1" 
+                         ScrollViewer.HorizontalScrollBarVisibility="Disabled" FontSize="12">
+
+                    <!-- Code that makes default selection dissapear -->
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ListBoxItem">
+                                        <ContentPresenter/>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+
+
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border BorderBrush="LightGray" Background="White" BorderThickness="1" Margin="0,0,0,5">
+                                <!--<Border.Effect>
+                                        <DropShadowEffect ShadowDepth="1"/>
+                                    </Border.Effect>-->
+
+                                <Grid Margin="2">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="115"/>
+                                        <ColumnDefinition Width="75"/>
+                                        <ColumnDefinition Width="150"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0">
+                                        <TextBlock FontSize="11" Text="{Binding DateAdded, Converter={StaticResource DateTimeConverter}}" />
+                                        <TextBlock FontSize="10"  Text="(Today)" VerticalAlignment="Center" Visibility="{Binding DateAdded, Converter={StaticResource IsTodayToVisConverter}}"/>
+                                    </StackPanel>
+                                    <TextBlock FontSize="11" Text="{Binding Rating,    Converter={StaticResource RatingKeyToName}}"   Grid.Row="0" Grid.Column="2"/>
+
+                                    <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.ColumnSpan="4" Margin="0,2,0,0">
+                                        <!-- USER NAME -->
+                                        <TextBlock>
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Style.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter Property="TextDecorations" Value="Underline" />
+                                                        </Trigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                            <Hyperlink Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.ViewUserCommand}" 
+                                                       CommandParameter="{Binding UserKey}"
+                                                       TextDecorations="None" Foreground="Black">
+                                                <TextBlock Text="{Binding UserKey, Converter={StaticResource UserKeyToNameConverter}}" FontWeight="Bold"/>
+                                            </Hyperlink>
+                                        </TextBlock>
+
+                                        <TextBlock Text=" "/>
+                                        <TextBlock Text="played"/>
+                                        <TextBlock Text=" "/>
+
+                                        <!-- MEDIA-->
+                                        <TextBlock>
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Style.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter Property="TextDecorations" Value="Underline" />
+                                                        </Trigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                            <Hyperlink Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.ViewMediaCommand}" 
+                                                       CommandParameter="{Binding MatchingMedia}"
+                                                       TextDecorations="None" Foreground="Black">
+                                                <TextBlock Text="{Binding MatchingMedia.Name}" ToolTip="{Binding PlayedKey}" FontWeight="Bold"/>
+                                            </Hyperlink>
+                                        </TextBlock>
+
+                                    </StackPanel>
+
+                                    <TextBlock Text="{Binding Memo}" TextWrapping="NoWrap" Grid.Row="2" Grid.ColumnSpan="4"  Margin="0,2,0,0"
+                                               FontSize="11" FontStyle="Normal"/>
+
+                                    <TextBlock Visibility="{Binding Memo, Converter={StaticResource NoMemoVisConverter}}" Text="No memo" Margin="0,2,0,0" Grid.Row="2" FontSize="11" FontStyle="Italic"/>
+
+
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+
+                    </ListBox.ItemTemplate>
+
+                </ListBox>
+            </TabItem>
+
+            <TabItem Header="Collection" Width="90"  DataContext="{Binding CollectionVM}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="25"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="25"/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Grid.ColumnSpan="2" Margin="5,2,0,2" >
+                        <TextBlock Text="{Binding MediaCount}"  VerticalAlignment="Center" Width="40"/>
+                        <CheckBox Content="Owned Games" IsChecked="{Binding OwnedGames}" Margin="00,0,0,0" VerticalContentAlignment="Center"/>
+                        <CheckBox Content="Digital Games" IsChecked="{Binding DigitalGames}" Margin="20,0,0,0" VerticalContentAlignment="Center"/>
+                        <CheckBox Content="Extra Games" IsChecked="{Binding ExtraGames}" Margin="20,0,0,0" VerticalContentAlignment="Center"/>
+                        <CheckBox Content="Dont Owned Games" IsChecked="{Binding DontOwnedGames}" Margin="20,0,0,0" VerticalContentAlignment="Center"/>
+
+                        <ComboBox ItemsSource="{Binding PlatformList}" Margin="20,0,0,0" Width="120"  DisplayMemberPath="Name" SelectedItem="{Binding SelectedPlatform}"/>
+                    </StackPanel>
+
+                    <Button Content="Refresh" Margin="0,1,1,1" Command="{Binding RefreshCommand}" HorizontalAlignment="Right" Grid.Column="1"/>
+
+                    <TextBox Grid.Row="1" Margin="0,0,0,2" Height="22" VerticalContentAlignment="Center" FontSize="16"
+                             Text="{Binding GameFilterText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                    <DataGrid Grid.Row="2" Grid.ColumnSpan="2" ItemsSource="{Binding DisplayCollectionList}" SelectedItem="{Binding SelectedCollectionMedia}" SelectionMode="Single"
+                              IsReadOnly="True" AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto">
+                        <DataGrid.InputBindings>
+                            <MouseBinding Gesture="LeftDoubleClick" Command="{Binding MediaClickedCommand}"/>
+                        </DataGrid.InputBindings>
+
+                        <DataGrid.Columns>
+
+                            <DataGridCheckBoxColumn Header="F" Binding="{Binding Finished}"/>
+                            <DataGridTextColumn Header="Name" Width="300"  Binding="{Binding MatchingMedia.Name}" />
+                            <DataGridTextColumn Header="Year" Width="50" Binding="{Binding MatchingMedia.YearReleased}" />
+                            <DataGridTextColumn Header="Platform" Width="80" Binding="{Binding MatchingMedia.Platform, Converter={StaticResource PlatformKeyToNameConverter}}" />
+                            <DataGridTextColumn Header="Genre" Width="75" Binding="{Binding MatchingMedia.Genre1, Converter={StaticResource GenreKeyToNameConverter}}" />
+                            <DataGridTextColumn Header="Genre" Width="75" Binding="{Binding MatchingMedia.Genre2, Converter={StaticResource GenreKeyToNameConverter}}" />
+                            <DataGridTextColumn Header="Beat" Width="40" Binding="{Binding TimesBeat}" />
+                            <DataGridTextColumn Header="Hours" Width="50" Binding="{Binding MatchingMedia.HoursToBeat}" />
+                            <DataGridCheckBoxColumn Header="Own"  Binding="{Binding Own}"/>
+                            <DataGridCheckBoxColumn Header="Digi" Binding="{Binding OwnDigitally}"/>
+                            <DataGridCheckBoxColumn Header="P" Binding="{Binding Playing}"/>
+
+
+                            <DataGridTemplateColumn Width="100" Header="Note">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Status}" TextTrimming="CharacterEllipsis"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTextColumn Header="RemakeType" Width="100" Binding="{Binding MatchingMedia.RemakeType}"/>
+                            <DataGridTextColumn Header="RemakeOf" Width="100" Binding="{Binding MatchingMedia.RemakeOf}"/>
+                            <DataGridCheckBoxColumn Header="Buy" Binding="{Binding Buying}"/>
+
+                            <DataGridTextColumn Header="GKey" Width="50" Binding="{Binding GameKey}" />
+                            <DataGridTextColumn Header="CKey" Width="50" Binding="{Binding CollectionKey}" />
+
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <Button Content="Edit Selected" Grid.Row="3" Width="85" FontSize="12" Command="{Binding EditSelectedCommand}"
+                            HorizontalAlignment="Left" Margin="2,2,0,2" Grid.ColumnSpan="2"/>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Played" Width="90" DataContext="{Binding PlayedVM}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="160"/>
+
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="25"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="25"/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Grid.ColumnSpan="2" Margin="0,2" >
+
+
+                        <TextBlock Text="{Binding SelectedUser.UserName}" FontWeight="Bold" FontSize="16" Margin="0,0,0,0"/>
+                        <TextBlock Text="{Binding MediaCount}" FontWeight="Normal" Margin="15,0,0,0" FontSize="14" VerticalAlignment="Center" Width="40"/>
+
+                        <CheckBox Content="Only Beaten Games" IsChecked="{Binding OnlyBeatenGames}"  Margin="15,0,0,0" VerticalContentAlignment="Center"/>
+
+                        <ComboBox Margin="15,0,0,0" Width="120" ItemsSource="{Binding PlatformList}" SelectedItem="{Binding SelectedPlatform}" DisplayMemberPath="Name"/>
+                        <ComboBox Margin="15,0,0,0" Width="80" ItemsSource="{Binding YearList}" SelectedValue="{Binding SelectedYear}" />
+                        <Button Content="Refresh" Margin="30,0,0,0" Command="{Binding RefreshCommand}" />
+
+                    </StackPanel>
+
+                    <Button Visibility="{Binding SelectedUser.UserKey, Converter={StaticResource FriendButtonConverter}}" 
+                                Content="{Binding AddRemoveFriendString}" Command="{Binding AddRemoveFriendCommand}" 
+                                Width="90" FontSize="10" Margin="2,3,2,3" HorizontalAlignment="Right" Grid.Column="2"/>
+
+                 
+                    <DataGrid ItemsSource="{Binding PlayedGameList}" SelectedItem="{Binding SelectedPlayedGame}"  SelectionMode="Single"
+                              IsReadOnly="True" Grid.Row="1" AutoGenerateColumns="False" Grid.ColumnSpan="1">
+                        <DataGrid.InputBindings>
+                            <MouseBinding Gesture="LeftDoubleClick" Command="{Binding MediaClickedCommand}"/>
+                        </DataGrid.InputBindings>
+                        <DataGrid.Columns>
+                            <DataGridCheckBoxColumn Header="B" Binding="{Binding Beaten}"/>
+                            <DataGridTextColumn Header="Name" Width="280" Binding="{Binding MatchingMedia.Name}" />
+                            <DataGridTextColumn Header="Played" Width="80" Binding="{Binding PlatformPlayedOn, Converter={StaticResource PlatformKeyToNameConverter}}" />
+                            <DataGridTextColumn Header="Genre" Width="75" Binding="{Binding MatchingMedia.Genre1, Converter={StaticResource GenreKeyToNameConverter}}" />
+                            <!--<DataGridTextColumn Header="Genre" Width="75" Binding="{Binding MatchingMedia.Genre2, Converter={StaticResource GenreKeyToNameConverter}}" />-->
+                            <DataGridTextColumn Header="H" Width="30" Binding="{Binding Hours}" />
+
+                            <DataGridTextColumn Header="Year" Width="45" Binding="{Binding DateAdded, Converter={StaticResource DateTimeConverter}, ConverterParameter=4}" />
+                            <DataGridTextColumn Header="Month" Width="78" Binding="{Binding MonthName}" />
+
+
+                            <DataGridTextColumn Header="Percent" Width="115" Binding="{Binding PercentCompleted, Converter={StaticResource PercentageKeyToNameConverter}}" />
+                            <DataGridTextColumn Header="Rating" Width="125" Binding="{Binding Rating, Converter={StaticResource RatingKeyToName}}" />
+                            
+                            <DataGridTextColumn Header="Gap" Width="40" Binding="{Binding Gap}" />
+                            <DataGridTextColumn Header="Og" Width="40" Binding="{Binding OgGap}" />
+
+                            <DataGridTextColumn Header="Date" Width="80" Binding="{Binding DateAdded, Converter={StaticResource DateTimeConverter}}" />
+
+
+                            <DataGridTemplateColumn Header="P">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate >
+                                        <CheckBox IsChecked="{Binding Private}" Visibility="{Binding UserKey, Converter={StaticResource UserKeyVisConverter}}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTextColumn Header="GKey" Width="50" Binding="{Binding GameKey}" />
+                            <DataGridTextColumn Header="PKey" Width="50" Binding="{Binding PlayedKey}" />
+
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <TabControl Grid.Column="1" Grid.Row="1" Margin="2,5,2,0">
+                        <TabItem Header="Consoles"  Width="50" FontSize="9">
+                            <ListBox ItemsSource="{Binding PlatformPlayedStats}"  FontSize="11">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Margin="0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="68"/>
+                                                <ColumnDefinition Width="33"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <TextBlock Text="{Binding Name}" Grid.Column="0"/>
+                                            <TextBlock Text="{Binding Value}" Grid.Column="1"/>
+                                            <TextBlock Text="{Binding Value2}" Grid.Column="2" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </TabItem>
+                        <TabItem Header="Genre" Width="45" FontSize="10">
+                            <ListBox ItemsSource="{Binding GenresPlayedStats}"  FontSize="11">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Margin="0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="68"/>
+                                                <ColumnDefinition Width="33"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <TextBlock Text="{Binding Name}" Grid.Column="0"/>
+                                            <TextBlock Text="{Binding Value}" Grid.Column="1"/>
+                                            <TextBlock Text="{Binding Value2}" Grid.Column="2" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </TabItem>
+                        <TabItem Header="Stats"  Width="45" FontSize="10">
+                            <StackPanel Margin="5">
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                                    <TextBlock Text="Average Gap: " FontSize="13" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{Binding Gap}" FontSize="14"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,5" >
+                                        <TextBlock Text="Original Gap:  " FontSize="13" VerticalAlignment="Center"/>
+                                        <TextBlock Text="{Binding OgGap}" FontSize="14"/>
+                                    </StackPanel>
+                                </StackPanel>
+                                <ListBox ItemsSource="{Binding TopMonthsStats}" FontSize="12">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid Margin="0,0,0,0">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="68"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+
+                                                <TextBlock Text="{Binding Name}" Grid.Column="0"/>
+                                                <TextBlock Text="{Binding Value}" Grid.Column="1"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </StackPanel>
+                        </TabItem>
+
+                    </TabControl>
+
+
+                    <Button Content="Edit Selected" Grid.Row="2" Width="85" FontSize="12" Command="{Binding EditSelectedCommand}"
+                            HorizontalAlignment="Left" Margin="2,2,0,2"/>
+
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Series" Width="90"  DataContext="{Binding SeriesVM}">
+
+            </TabItem>
+
+            <TabItem Header="To Play" Width="90"  DataContext="{Binding ToPlayVM}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="100"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="25"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding GameCount}" FontSize="16" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                    </StackPanel>
+                    
+                    <DataGrid ItemsSource="{Binding ToPlayGamesList}" IsReadOnly="True" AutoGenerateColumns="False" Grid.Row="1" SelectionMode="Single">
+                        <DataGrid.Columns>
+
+                            <DataGridTextColumn Header="Name" Width="300"  Binding="{Binding MatchingMedia.Name}" />
+                            <DataGridTextColumn Header="Year" Width="70" Binding="{Binding MatchingMedia.YearReleased}" />
+                            <DataGridTextColumn Header="Platform" Width="70" Binding="{Binding MatchingMedia.Platform, Converter={StaticResource PlatformKeyToNameConverter}}" />
+                            <DataGridTextColumn Header="Genre" Width="75" Binding="{Binding MatchingMedia.Genre1, Converter={StaticResource GenreKeyToNameConverter}}" />
+                            <DataGridTextColumn Header="Hours" Width="50" Binding="{Binding MatchingMedia.HoursToBeat}" />
+                            <DataGridCheckBoxColumn Header="Own"  Binding="{Binding Own}"/>
+                            <DataGridCheckBoxColumn Header="Digi" Binding="{Binding OwnDigitally}"/>
+
+                            <DataGridTemplateColumn Width="100" Header="Note">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Status}" TextTrimming="CharacterEllipsis"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTextColumn Header="Genre" Width="75" Binding="{Binding MatchingMedia.Genre2, Converter={StaticResource GenreKeyToNameConverter}}" />
+                            <DataGridTextColumn Header="RemakeType" Width="100" Binding="{Binding MatchingMedia.RemakeType}"/>
+                            <DataGridTextColumn Header="RemakeOf" Width="100" Binding="{Binding MatchingMedia.RemakeOf}"/>
+
+                            
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="1" VerticalAlignment="Top" Margin="10" HorizontalAlignment="Center">
+                        <Button Content="Up" Width="50" Height="30" Margin="0,0,0,10"/>
+                        <Button Content="Down" Width="50" Height="30"  />
+                    </StackPanel>
+
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="To Buy" Width="90"  DataContext="{Binding ToBuyVM}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="100"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="25"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="25"/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding GameCount}" FontSize="16" VerticalAlignment="Center" Margin="5,0,0,0" Width="40"/>
+                        
+                        <TextBlock Text="$" FontSize="16" VerticalAlignment="Center" Margin="25,0,0,0"/>
+                        <TextBlock Text="{Binding TotalPrice}" FontSize="16" VerticalAlignment="Center" Margin="0,0,0,0" Width="40"/>
+                        
+                    </StackPanel>
+
+                    <DataGrid ItemsSource="{Binding ToBuyGamesList}" SelectedItem="{Binding SelectedCollectionMedia}" IsReadOnly="True" AutoGenerateColumns="False" Grid.Row="1" SelectionMode="Single">
+                        <DataGrid.Columns>
+
+                            <DataGridTextColumn Header="Name" Width="300"  Binding="{Binding MatchingMedia.Name}" />
+                            <DataGridTextColumn Header="Year" Width="70" Binding="{Binding MatchingMedia.YearReleased}" />
+                            <DataGridTextColumn Header="Platform" Width="70" Binding="{Binding MatchingMedia.Platform, Converter={StaticResource PlatformKeyToNameConverter}}" />
+                            <DataGridTextColumn Header="Genre" Width="75" Binding="{Binding MatchingMedia.Genre1, Converter={StaticResource GenreKeyToNameConverter}}" />
+                            <DataGridTextColumn Header="Price" Width="50" Binding="{Binding MatchingMedia.Price}" />
+                            <DataGridCheckBoxColumn Header="Digi" Binding="{Binding OwnDigitally}"/>
+
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <Button Content="Edit Selected" Grid.Row="2" Width="85" FontSize="12" Command="{Binding EditSelectedCommand}"
+                            HorizontalAlignment="Left" Margin="2,2,0,2" Grid.ColumnSpan="2"/>
+
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Friends" Width="90"  DataContext="{Binding FriendsVM}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="140"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="25"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Grid.ColumnSpan="2" Margin="0,12,0,13" >
+                    </StackPanel>
+
+                    <StackPanel Width="250 " Margin="15" Grid.Column="0" Grid.Row="1" >
+                        <TextBlock Text="Friends" Margin="0,0,0,10" HorizontalAlignment="Center" FontWeight="Bold" FontSize="16"/>
+                        <DataGrid ItemsSource="{Binding AllFriends}" SelectedItem="{Binding SelectedUser}" 
+                              IsReadOnly="True" AutoGenerateColumns="False"  Height="300" HorizontalScrollBarVisibility="Hidden"
+                              >
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Key" Width="50" Binding="{Binding UserKey}" />
+                                <DataGridTextColumn Header="Name" Width="195" Binding="{Binding UserName}" />
+                            </DataGrid.Columns>
+                            <DataGrid.InputBindings>
+                                <MouseBinding Gesture="LeftDoubleClick" Command="{Binding FriendClickedCommand}" />
+                            </DataGrid.InputBindings>
+                        </DataGrid>
+                    </StackPanel>
+
+
+                    <StackPanel Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Margin="0,-150,0,0">
+                        <Button Content="&lt;- Swap ->" Height="32" Command="{Binding SwapFriendCommand}"/>
+                    </StackPanel>
+
+
+                    <StackPanel Width="250 " Margin="10" Grid.Row="1" Grid.Column="2" >
+                        <TextBlock Text="All Users" Margin="0,0,0,10" HorizontalAlignment="Center" FontWeight="Bold" FontSize="16"/>
+                        <DataGrid ItemsSource="{Binding OtherUsers}" SelectedItem="{Binding SelectedUser}" 
+                              IsReadOnly="True"  AutoGenerateColumns="False" Height="300" HorizontalScrollBarVisibility="Hidden"
+                              >
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Key" Width="50" Binding="{Binding UserKey}" />
+                                <DataGridTextColumn Header="Name" Width="195" Binding="{Binding UserName}" />
+                            </DataGrid.Columns>
+                            <DataGrid.InputBindings>
+                                <MouseBinding Gesture="LeftDoubleClick" Command="{Binding FriendClickedCommand}" />
+                            </DataGrid.InputBindings>
+                        </DataGrid>
+                    </StackPanel>
+
+
+
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Stats" Width="90"  DataContext="{Binding StatsVM}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="25"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Text="Most Played Games" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
+                    <DataGrid ItemsSource="{Binding MostPlayedGames}" SelectedItem="{Binding SelectedMostPlayed}" Grid.Row="1" Margin="0,5,0,0" IsReadOnly="True" AutoGenerateColumns="False">
+                        <DataGrid.InputBindings>
+                            <MouseBinding Gesture="LeftDoubleClick" Command="{Binding GameClickedCommand}"/>
+                        </DataGrid.InputBindings>
+                        <DataGrid.CellStyle>
+                            <Style TargetType="{x:Type DataGridCell}">
+                                <Style.Triggers>
+                                    <Trigger Property="DataGridCell.IsSelected" Value="True">
+                                        <Setter Property="BorderBrush">
+                                            <Setter.Value>
+                                                <SolidColorBrush Color="Transparent"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Setter Property="Foreground"
+                            Value="{DynamicResource
+                                   {x:Static SystemColors.ControlTextBrushKey}}"/>
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <SolidColorBrush Color="Transparent"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.CellStyle>
+
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Name" Width="*" Binding="{Binding Name}" />
+                            <DataGridTextColumn Header="#" Width="30" Binding="{Binding TimesBeat}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+
+                </Grid>
+            </TabItem>
+        </TabControl>
+
+        <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,4">
+            <TextBlock Text="Completion: " FontWeight="Bold" FontSize="18" VerticalAlignment="Bottom" />
+            <TextBlock Text="{Binding CompletionString}" FontWeight="Bold" FontSize="18" VerticalAlignment="Bottom" />
+        </StackPanel>
+        
+        <StackPanel Grid.Column="1" Grid.Row="3">
+            <StackPanel  Orientation="Horizontal" Margin="0,0,0,0">
+                <TextBlock Text="Total Games:"  Width="115" FontSize="14" VerticalAlignment="Bottom" />
+                <TextBlock Text="{Binding TotalGamesString}" VerticalAlignment="Bottom" />
+            </StackPanel>
+            <StackPanel  Orientation="Horizontal" Margin="0,0,0,0">
+                <TextBlock Text="Unique Games:" Width="115" FontSize="14" VerticalAlignment="Bottom" />
+                <TextBlock Text="{Binding UniqueGamesString}" VerticalAlignment="Bottom" />
+            </StackPanel>
+            <TextBlock Text="{Binding GamesToBeatString}" VerticalAlignment="Bottom" />
+            <TextBlock Text="{Binding TotalGamesBeatString}" VerticalAlignment="Bottom" />
+        </StackPanel>
+
+        <TabControl Grid.Row="4" Grid.Column="1" VerticalAlignment="Stretch" Margin="0,5,5,5" SelectedIndex="{Binding StatsSelectedTabIndex}">
+            <TabItem Header="Consoles" FontSize="10" Width="60">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Orientation="Horizontal">
+                        <RadioButton GroupName="consolesSortRB" VerticalContentAlignment="Center" Content="Total Games" Command="{Binding ConsoleStatOrderCommand}" CommandParameter="TotalGames"/>
+                        <RadioButton GroupName="consolesSortRB" IsChecked="True" VerticalContentAlignment="Center" Margin="15,0,0,0" Content="Beaten %" Command="{Binding ConsoleStatOrderCommand}" CommandParameter="BeatenPercent"/>
+                    </StackPanel>
+
+                    <ListBox  Name="ConsolesStatsListBox" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemsSource="{Binding ConsoleStats}" FontSize="12" Grid.Row="1">
+                        <ListBox.Resources>
+                            <Style TargetType="ListBoxItem">
+                                <EventSetter Event="MouseDoubleClick" Handler="ConsoleStatsRow_MouseDoubleClick"/>
+                            </Style>
+                        </ListBox.Resources>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="75"/>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Text="{Binding Name}" Grid.Column="0"/>
+                                    <TextBlock Text="{Binding Value}" Grid.Column="1" Width="60"/>
+                                    <TextBlock Text="{Binding Value2}" Grid.Column="2" Margin="0,0,20,0" />
+                                    <TextBlock Text="{Binding Value3}" Grid.Column="3" HorizontalAlignment="Right" />
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+
+
+
+
+            </TabItem>
+            <TabItem Header="Years" FontSize="10" Width="50" >
+                <Grid >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="19"/>
+                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="11*"/>
+                        <ColumnDefinition Width="3*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <ListBox ItemsSource="{Binding YearStats}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled" 
+                             Grid.Column="0" BorderThickness="0,0,1,0" Grid.ColumnSpan="2"  FontSize="12" >
+                        <ListBox.Resources>
+                            <Style TargetType="ListBoxItem">
+                                <EventSetter Event="MouseDoubleClick" Handler="YearStatsRow_MouseDoubleClick"/>
+                            </Style>
+                        </ListBox.Resources>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="50"/>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Text="{Binding Name}" Grid.Column="0"/>
+                                    <TextBlock Text="{Binding Value}" Grid.Column="1" Width="60"/>
+                                    <TextBlock Text="{Binding Value2}" Grid.Column="2" />
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                    <ListBox ItemsSource="{Binding RankedYearStats}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Grid.Column="2" BorderThickness="0" Grid.ColumnSpan="2"
+                              FontSize="12">
+                        <ListBox.Resources>
+                            <Style TargetType="ListBoxItem">
+                                <EventSetter Event="MouseDoubleClick" Handler="YearStatsRow_MouseDoubleClick"/>
+                            </Style>
+                        </ListBox.Resources>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="36"/>
+                                        <ColumnDefinition Width="45"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Text="{Binding Value}" Grid.Column="0" />
+                                    <TextBlock Text="{Binding Name}" Grid.Column="1"/>
+                                    <TextBlock Text="{Binding Value2}" Grid.Column="2"/>
+
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Series" FontSize="10" Width="50">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Orientation="Horizontal">
+                        <RadioButton GroupName="seriesSortRB" VerticalContentAlignment="Center" Content="Total Games"  Checked="TotalRadioButton_Checked"/>
+                        <RadioButton GroupName="seriesSortRB" IsChecked="True" VerticalContentAlignment="Center" Margin="15,0,0,0" Content="Beaten %" Checked="CompletionRadioButton_Checked"/>
+                        <RadioButton GroupName="seriesSortRB" VerticalContentAlignment="Center" Content="Owned %" Margin="15,0,0,0" Checked="OwnedRadioButton_Checked"/>
+                    </StackPanel>
+                    
+                    <ListBox Name="SeriesStatsListBox" Margin="0,1,0,0" Grid.Row="1" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible" FontSize="12">
+                        <ListBox.Resources>
+                            <Style TargetType="ListBoxItem">
+                                <EventSetter Event="MouseDoubleClick" Handler="SeriesStatsRow_MouseDoubleClick"/>
+                            </Style>
+                        </ListBox.Resources>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="105"/>
+                                        <ColumnDefinition Width="10"/>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition Width="10"/>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition Width="10"/>
+
+                                        <ColumnDefinition Width="20"/>
+
+                                        <ColumnDefinition Width="30"/>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition Width="30"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Grid.Column="0" Text="{Binding Name}"/>
+
+                                    <TextBlock Grid.Column="1" Text="{Binding GamesBeat}" HorizontalAlignment="Center" />
+                                    <TextBlock Grid.Column="2" Text=" / "/>
+                                    <TextBlock Grid.Column="3" Text="{Binding GamesOwned}" HorizontalAlignment="Center"/>
+                                    <TextBlock Grid.Column="4" Text=" / " FontWeight="Bold" />
+                                    <TextBlock Grid.Column="5" Text="{Binding TotalGames}" HorizontalAlignment="Center"/>
+
+
+                                    <TextBlock Grid.Column="7" Text="{Binding DisplayBeatPercentage}" HorizontalAlignment="Center" />
+                                    <TextBlock Grid.Column="8" Text=" / "/>
+                                    <TextBlock Grid.Column="9" Text="{Binding DisplayOwnPercentage}" HorizontalAlignment="Center" />
+
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Stats" FontSize="10" Width="50">
+                <ListBox ItemsSource="{Binding TopMonthsStats}" FontSize="14" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <ListBox.Resources>
+                        <Style TargetType="ListBoxItem">
+                            <EventSetter Event="MouseDoubleClick" Handler="TopMonthsStatsRow_MouseDoubleClick"/>
+                        </Style>
+                    </ListBox.Resources>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Orientation="Horizontal" Grid.Column="0" HorizontalAlignment="Right">
+                                    <TextBlock Text="#"/>
+                                    <TextBlock Text="{Binding Value3}" Width="25"/>
+                                </StackPanel>
+                                <TextBlock Text="{Binding Name}" HorizontalAlignment="Right" Grid.Column="1" Width="75"/>
+                                <TextBlock Text="{Binding Value}" Grid.Column="2" Width="50"/>
+                                <TextBlock Text="{Binding Value2}" Grid.Column="3" Width="60"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </TabItem>
+
+        </TabControl>
+
+
+    </Grid>
+</Window>
