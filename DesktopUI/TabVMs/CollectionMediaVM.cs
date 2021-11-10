@@ -2,6 +2,7 @@
 using Prism.Commands;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,8 @@ namespace DesktopUI.TabVMs
         public ICommand EditSelectedCommand { get; private set; }
 
         public List<Platform> PlatformList { get; set; }
+        public ObservableCollection<Stat> YearReleasedStats { get; set; }
+
 
         private Platform selectedPlatform;
         public Platform SelectedPlatform
@@ -201,6 +204,9 @@ namespace DesktopUI.TabVMs
             DisplayCollectionList = Utilities.General.CloneList(CollectionMediaList);
             MediaCount = DisplayCollectionList.Count;
 
+            YearReleasedStats = UpdateYearReleasedStats(DisplayCollectionList);
+            OnPropertyChanged("YearReleasedStats");
+
         }
 
         public void UpdateListPropertyChanged()
@@ -208,6 +214,29 @@ namespace DesktopUI.TabVMs
             OnPropertyChanged("EntireCollection");
             OnPropertyChanged("CollectionMediaList");
             OnPropertyChanged("DisplayCollectionList");
+        }
+
+        public ObservableCollection<Stat> UpdateYearReleasedStats(CollectionGameList games)
+        {
+            var stats = new ObservableCollection<Stat>();
+            if (games.Count == 0) return stats;
+
+            var orderedList = games.OrderBy(x => x.MatchingMedia.YearReleased);
+            var earliestYear = orderedList.First().MatchingMedia.YearReleased;
+
+            for (int i = DateTime.Now.Year; i >= earliestYear; i--)
+            {
+                var thisYear = games.Where(x => x.MatchingMedia?.YearReleased == i).ToList();
+
+                var stat = new Stat();
+                stat.Name = i.ToString();
+                stat.Value = thisYear.Count.ToString();
+
+                stats.Add(stat);
+
+            }
+
+            return stats;
         }
 
     }
