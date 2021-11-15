@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,8 @@ namespace DesktopUI.TabVMs
         public int GameKey { get; set; }
         public string Name { get; set; }
         public int TimesBeat { get; set; }
+        public int Year { get; set; }
+        public string Platform{ get; set; }
 
     }
 
@@ -24,6 +27,7 @@ namespace DesktopUI.TabVMs
         // Commands
         //******************************************
         public ICommand GameClickedCommand { get; private set; }
+        public ICommand OnThisDayGameClickedCommand { get; private set; }
 
 
         //******************************************
@@ -34,7 +38,20 @@ namespace DesktopUI.TabVMs
         public StatGame SelectedMostPlayed { get; set; }
         public List<StatGame> MostPlayedGames { get; set; }
 
+        public StatGame SelectedOnThisDay { get; set; }
+        public ObservableCollection<StatGame> OnThisDayGames { get; set; }
 
+        private DateTime onThisDayDate;
+        public DateTime OnThisDayDate
+        {
+            get { return onThisDayDate; }
+            set 
+            { 
+                onThisDayDate = value; 
+                OnPropertyChanged("OnThisDayDate"); 
+                LoadOnThisDayGames();
+            }
+        }
 
 
         //******************************************
@@ -44,8 +61,12 @@ namespace DesktopUI.TabVMs
             : base()
         {
             this.GameClickedCommand = new DelegateCommand<object>(this.OnGameClicked);
+            this.OnThisDayGameClickedCommand = new DelegateCommand<object>(this.OnOnThisDayGameClicked);
 
             MostPlayedGames = new List<StatGame>();
+            OnThisDayGames = new ObservableCollection<StatGame>();
+
+            OnThisDayDate = DateTime.Now;
 
             Load();
         }
@@ -53,6 +74,7 @@ namespace DesktopUI.TabVMs
         public void Load()
         {
             LoadMostPlayedGames();
+          //  LoadOnThisDayGames();
         }
 
         //******************************************
@@ -66,6 +88,37 @@ namespace DesktopUI.TabVMs
                 if(game != null)
                     ParentVM.ViewMedia(game);
             }
+        }
+
+        private void OnOnThisDayGameClicked(object obj)
+        {
+            if (SelectedOnThisDay != null)
+            {
+                var game = LoadedData.AllGames.FirstOrDefault(x => x.GameKey == SelectedOnThisDay.GameKey);
+                if (game != null)
+                    ParentVM.ViewMedia(game);
+            }
+        }
+
+        public void LoadOnThisDayGames()
+        {
+            OnThisDayGames.Clear();
+            var games = LoadedData.MyPlayedGames.Where(x => x.ExactDate == 1 && x.DateAdded.Month == OnThisDayDate.Month && x.DateAdded.Day == OnThisDayDate.Day).ToList();
+
+            for (int i = 0; i < games.Count; i++)
+            {
+                var game = games[i];
+
+                var stat = new StatGame();
+                stat.GameKey = game.GameKey;
+                stat.Name = game.MatchingMedia.Name;
+                stat.Year = game.DateAdded.Year;
+                stat.Platform = game.PlatformInfo;
+
+                OnThisDayGames.Add(stat);
+            }
+
+
         }
 
         public void LoadMostPlayedGames()
@@ -122,18 +175,14 @@ namespace DesktopUI.TabVMs
                 if (max > 5)
                     break;
 
-
                 MostPlayedGames.Add(g);
-
-
-
-
-
             }
             
          //   MostPlayedGames.AddRange(list);
 
         }
+
+
 
 
     }
