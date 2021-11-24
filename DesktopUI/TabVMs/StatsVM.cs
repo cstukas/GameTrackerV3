@@ -158,26 +158,35 @@ namespace DesktopUI.TabVMs
 
             list = list.OrderByDescending(x => x.TimesBeat).ToList();
 
-            var prevNum = -1;
-            var max = 0;
+
+
+            //var prevNum = -1;
+            //var max = 0;
             for (int i = 0; i < list.Count; i++)
             {
                 var g = list[i];
 
-                if (g.TimesBeat == 0) break;
-
-                if(prevNum != g.TimesBeat)
+                if(g.TimesBeat > 2)
                 {
-                    prevNum = g.TimesBeat;
-                    max++;
+                    MostPlayedGames.Add(g);
+
                 }
 
-                if (max > 5)
-                    break;
 
-                MostPlayedGames.Add(g);
+                //if (g.TimesBeat <= 1) break;
+
+
+                ////if (prevNum != g.TimesBeat)
+                ////{
+                ////    prevNum = g.TimesBeat;
+                ////    max++;
+                ////}
+
+                ////if (max > 5)
+                ////    break;
+
             }
-            
+
          //   MostPlayedGames.AddRange(list);
 
         }
