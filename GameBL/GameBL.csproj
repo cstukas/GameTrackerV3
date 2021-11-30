@@ -54,6 +54,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RemakeTypes.cs" />
     <Compile Include="RememberLogin.cs" />
+    <Compile Include="Series.cs" />
+    <Compile Include="SeriesGame.cs" />
+    <Compile Include="SeriesStats.cs" />
     <Compile Include="Stat.cs" />
     <Compile Include="Stats.cs" />
     <Compile Include="UpdateAvailable.cs" />

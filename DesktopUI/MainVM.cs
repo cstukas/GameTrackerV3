@@ -59,8 +59,10 @@ namespace DesktopUI
         public FriendsVM FriendsVM { get; set; }
         public CollectionMediaVM CollectionVM { get; set; }
         public ToPlayVM ToPlayVM { get; set; }
+        public SeriesVM SeriesVM { get; set; }
         public ToBuyVm ToBuyVM { get; set; }
         public StatsVM StatsVM { get; set; }
+
 
 
         private ObservableCollection<Stat> consoleStats;
@@ -77,6 +79,15 @@ namespace DesktopUI
             set { yearStats = value; OnPropertyChanged("YearStats"); }
         }
 
+        private SeriesStats seriesStatsList;
+        public SeriesStats SeriesStatsList
+        {
+            get { return seriesStatsList; }
+            set { seriesStatsList = value; OnPropertyChanged("SeriesStatsList"); }
+        }
+
+        public SeriesStat SelectedSeriesStat { get; set; }
+
         private ObservableCollection<Stat> rankedYearStats;
         public ObservableCollection<Stat> RankedYearStats
         {
@@ -85,6 +96,8 @@ namespace DesktopUI
         }
 
         public ObservableCollection<Stat> TopMonthsStats { get; set; }
+
+        public bool IsOnSeriesTab { get; set; }
 
         private int statsSelectedTabIndex;
 
@@ -99,7 +112,10 @@ namespace DesktopUI
                         break;
                 }
 
-
+                if (statsSelectedTabIndex == 2)
+                    IsOnSeriesTab = true;
+                else
+                    IsOnSeriesTab = false;
 
 
 
@@ -226,6 +242,7 @@ namespace DesktopUI
             FriendsVM.ParentVM = this;
             ToPlayVM = new ToPlayVM(this);
             ToBuyVM = new ToBuyVm(this);
+            SeriesVM = new SeriesVM(this);
             StatsVM = loadedStats;
             StatsVM.ParentVM = this;
 
@@ -245,12 +262,15 @@ namespace DesktopUI
             ShowKeys = false;
 
             UpdateStats();
+
+
+            LoadSeriesStatsList(1);
         }
 
         public void UpdateStats()
         {
             Console.WriteLine("Updating Stats");
-            var collection = CollectionVM.EntireCollection.Where(x => x.Playing == 1 && x.Own == 1 && x.UserKey == CurrentUser.UserKey).ToList();
+            var collection = LoadedData.MyCollection.Where(x => x.Playing == 1 && x.Own == 1 && x.UserKey == CurrentUser.UserKey).ToList();
             var beaten = collection.Where(x => x.Finished == 1).ToList();
             Stats.CollectionCount = collection.Count;
             Stats.CollectionBeatenCount = beaten.Count;
@@ -684,6 +704,12 @@ namespace DesktopUI
 
             }
         }
+        public void SeriesStatsClicked(SeriesStat stat)
+        {
+            SelectedTabIndex = (int)MenuTabs.Series; 
+            SeriesVM.SelectedSeries = LoadedData.SeriesList.FirstOrDefault(x => x.SeriesKey == stat.SeriesKey);
+        }
+        
 
 
         public void ConsoleStatsClicked(Stat stat)
@@ -784,7 +810,7 @@ namespace DesktopUI
 
         public void UpdateCollectionFinished(Game game)
         {
-            var alikeGames = CollectionGame.GetAllAlikeGames(game, CollectionVM.EntireCollection);
+            var alikeGames = CollectionGame.GetAllAlikeGames(game, LoadedData.MyCollection);
             var beatenGames = PlayedGame.GetBeatenGamesFromMemory(alikeGames);
 
             for (int a = 0; a < alikeGames.Count; a++)
@@ -793,7 +819,7 @@ namespace DesktopUI
 
                 PlayedGame.UpdatePlayedCount(beatenGames.Count, cg.GameKey, Utilities.UserUtils.CurrentUser.UserKey);
 
-                var matchInMem = CollectionVM.EntireCollection.FirstOrDefault(x => x.GameKey == cg.GameKey && x.UserKey == Utilities.UserUtils.CurrentUser.UserKey);
+                var matchInMem = LoadedData.MyCollection.FirstOrDefault(x => x.GameKey == cg.GameKey && x.UserKey == Utilities.UserUtils.CurrentUser.UserKey);
                 if (matchInMem != null)
                 {
                     matchInMem.TimesBeat = beatenGames.Count;
@@ -805,5 +831,26 @@ namespace DesktopUI
             }
 
         }
+
+        public void LoadSeriesStatsList(int sort)
+        {
+            Mouse.OverrideCursor = Cursors.Wait;
+
+
+            SeriesStats stats;
+
+            if (sort == 1)
+                stats = new SeriesStats("BeatenPercentage");
+            else if (sort == 2)
+                stats = new SeriesStats("OwnPercentage");
+            else
+                stats = new SeriesStats("TotalGames");
+
+            SeriesStatsList = stats;
+
+            Mouse.OverrideCursor = null;
+        }
     }
+
+   
 }

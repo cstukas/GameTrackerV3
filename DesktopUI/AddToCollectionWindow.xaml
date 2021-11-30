@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DesktopUI"
         mc:Ignorable="d"
-        Title="{Binding WindowTitle}" Height="363" Width="360" FontSize="14" >
+        Title="{Binding WindowTitle}" Height="393" Width="365" FontSize="14" >
     <Grid>
         <Grid.RowDefinitions>
 
@@ -46,6 +46,7 @@
                 <TextBlock Text="Game Info" FontSize="10" Margin="0,0,0,0" />
 
              </StackPanel>
+            
             <CheckBox Content="Already Exists" FontSize="12" Margin="5,-13,0,0" IsEnabled="false" IsChecked="{Binding IsNewGame, Converter={StaticResource BoolFlipConverter}}"/>
 
 
@@ -84,7 +85,18 @@
 
                 <ComboBox  HorizontalAlignment="Stretch" ItemsSource="{Binding RemakeOfList}" IsEditable="True" Margin="0,0,0,0"
                                     DisplayMemberPath="DisplayString" SelectedValuePath="GameKey" SelectedValue="{Binding RemakeOf}"/>
+                
+                
             </DockPanel>
+
+
+            <StackPanel Orientation="Horizontal" Margin="0,5,5,0">
+                <TextBlock Text="Series " Margin="0,0,0,0" Width="45" VerticalAlignment="Center"/>
+                <ComboBox Width="188" ItemsSource="{Binding SeriesList}" DisplayMemberPath="Name" SelectedValuePath="SeriesKey" SelectedValue="{Binding SeriesKey}" />
+                <ComboBox Width="50" Margin="5,0,0,0" ItemsSource="{Binding SeriesTypeList}" DisplayMemberPath="Name" SelectedValuePath="SeriesTypeKey" SelectedValue="{Binding SeriesType}" />
+                <TextBox Width="40" Margin="5,0,0,0" Text="{Binding SeriesOrderNum}"/>
+            </StackPanel>
+
         </StackPanel>
 
 
@@ -118,7 +130,7 @@
             </DockPanel>
 
             <DockPanel Margin="0,5,5,0">
-                <TextBlock Text="Status " Margin="0,0,0,0" Width="45"/>
+                <TextBlock Text="Status " Margin="0,0,0,0" Width="45"  VerticalAlignment="Center"/>
                 <TextBox Text="{Binding Status}" IsEnabled="{Binding Own}" />
             </DockPanel>
 

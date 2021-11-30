@@ -22,6 +22,7 @@ namespace GameBL
         public int PercentBeaten { get; set; }
         public DateTime DateAdded { get; set; }
 
+
     }
 
     [Serializable]

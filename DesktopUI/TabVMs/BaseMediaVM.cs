@@ -61,6 +61,7 @@ namespace DesktopUI.TabVMs
             }
             else
             {
+
             }
 
             ParentVM.ViewMedia(media);

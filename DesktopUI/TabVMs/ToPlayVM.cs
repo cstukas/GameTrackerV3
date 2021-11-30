@@ -55,7 +55,7 @@ namespace DesktopUI.TabVMs
         //******************************************
         public void RefreshData(bool onlyFriends = false)
         {
-            var toPlay = ParentVM.CollectionVM.EntireCollection.Where(x => x.Finished == 0 && x.Playing == 1 && x.Own == 1).OrderBy(x => x.MatchingMedia.Name).ToList();
+            var toPlay = LoadedData.MyCollection.Where(x => x.Finished == 0 && x.Playing == 1 && x.Own == 1).OrderBy(x => x.MatchingMedia.Name).ToList();
             ToPlayGamesList = Utilities.General.CloneList(toPlay);
             GameCount = ToPlayGamesList.Count;
         }

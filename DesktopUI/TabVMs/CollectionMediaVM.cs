@@ -41,11 +41,11 @@ namespace DesktopUI.TabVMs
             set { selectedUser = value; OnPropertyChanged("SelectedUser"); }
         }
 
-        private CollectionGameList entireCollection;
-        public CollectionGameList EntireCollection
+        private CollectionGameList myCollection;
+        public CollectionGameList MyCollection
         {
-            get { return entireCollection; }
-            set { entireCollection = value; OnPropertyChanged("EntireCollection"); }
+            get { return myCollection; }
+            set { myCollection = value; OnPropertyChanged("MyCollection"); }
         }
 
 
@@ -125,7 +125,7 @@ namespace DesktopUI.TabVMs
             this.RefreshCommand = new DelegateCommand<object>(this.OnRefresh);
             this.EditSelectedCommand = new DelegateCommand<object>(this.OnEditSelected);
 
-            EntireCollection = new CollectionGameList();
+            myCollection = LoadedData.MyCollection;
             CollectionMediaList = new CollectionGameList();
             DisplayCollectionList = new CollectionGameList();
 
@@ -151,7 +151,7 @@ namespace DesktopUI.TabVMs
         public void LoadAll(Utilities.User user)
         {
             SelectedUser = user;
-            EntireCollection.LoadCollection(SelectedUser.UserKey);
+
        //     MediaCount = CollectionMediaList.Count;
         }
 
@@ -170,10 +170,10 @@ namespace DesktopUI.TabVMs
             DisplayCollectionList.Clear();
             List<CollectionGame> listToShow = new List<CollectionGame>();
 
-            var allCollection = EntireCollection.ToList();
+            var allCollection = MyCollection.ToList();
 
             if (SelectedPlatform.PlatformKey != 0)
-              allCollection = EntireCollection.Where(x=>x.MatchingMedia.Platform == SelectedPlatform.PlatformKey).ToList();
+              allCollection = MyCollection.Where(x=>x.MatchingMedia.Platform == SelectedPlatform.PlatformKey).ToList();
 
             var allOwned = allCollection.Where(x => x.Own == 1).ToList();
             var owned = allOwned.Where(x => x.Playing == 1).ToList();

@@ -46,6 +46,9 @@ namespace DesktopUI
         public List<Platform> PlatformList { get; set; }
         public GenreList Genres { get; set; }
         public RemakeTypes RemakeTypeList { get; set; }
+        public Series SeriesList { get; set; }
+        public SeriesTypeList SeriesTypeList { get; set; }
+
 
         private bool isNewGame;
         public bool IsNewGame
@@ -130,6 +133,29 @@ namespace DesktopUI
             set { selectedRemakeType = value; OnPropertyChanged("SelectedRemakeType"); }
         }
 
+
+        private int seriesKey;
+        public int SeriesKey
+        {
+            get { return seriesKey; }
+            set { seriesKey = value; OnPropertyChanged("SeriesKey"); }
+        }
+
+        private int seriesType;
+        public int SeriesType
+        {
+            get { return seriesType; }
+            set { seriesType = value; OnPropertyChanged("SeriesType"); }
+        }
+
+        private int seriesOrderNum;
+        public int SeriesOrderNum
+        {
+            get { return seriesOrderNum; }
+            set { seriesOrderNum = value; OnPropertyChanged("SeriesOrderNum"); }
+        }
+
+
         private int remakeOf;
         public int RemakeOf
         {
@@ -202,6 +228,8 @@ namespace DesktopUI
             PlatformList = LoadedData.PlatformList;
             Genres = Globals.GenreList;
             RemakeTypeList = LoadedData.RemakeTypeList;
+            SeriesList = LoadedData.SeriesList;
+            SeriesTypeList = LoadedData.SeriesTypeList;
 
             if (collGame == null)
             {
@@ -221,6 +249,7 @@ namespace DesktopUI
                 MapGame(game);
                 isNewGame = false;
 
+    
                 OgCollGame = collGame;
                 OgCollectionGameDto = Utilities.General.Map<CollectionGame, CollectionGameDto>(collGame);
 
@@ -234,6 +263,7 @@ namespace DesktopUI
                     Reason = collGame.Reason;
                     Status = collGame.Status;
                     
+                   
 
                 }
                 else
@@ -259,11 +289,11 @@ namespace DesktopUI
                 {
                     Mouse.OverrideCursor = Cursors.Wait;
 
-                    var gameInColl = ParentVM.CollectionVM.EntireCollection.FirstOrDefault(x => x.CollectionKey == ogCollGame.CollectionKey);
-                    if (ParentVM.CollectionVM.EntireCollection.Contains(gameInColl))
+                    var gameInColl = LoadedData.MyCollection.FirstOrDefault(x => x.CollectionKey == ogCollGame.CollectionKey);
+                    if (LoadedData.MyCollection.Contains(gameInColl))
                     {
-                        var ndx = ParentVM.CollectionVM.EntireCollection.IndexOf(gameInColl);
-                        ParentVM.CollectionVM.EntireCollection.RemoveAt(ndx);
+                        var ndx = LoadedData.MyCollection.IndexOf(gameInColl);
+                        LoadedData.MyCollection.RemoveAt(ndx);
                     }
 
                     CollectionGame.DeleteMedia(OgCollGame);
@@ -309,6 +339,11 @@ namespace DesktopUI
             if(SelectedRemakeType != null)
                 game.RemakeType = SelectedRemakeType.Key;
 
+            game.SeriesKey = SeriesKey;
+            game.SeriesOrderNum = SeriesOrderNum * 100;
+            game.SeriesType = SeriesType;
+
+
             game.RemakeOf = RemakeOf;
             game.Price = Price;
 
@@ -337,7 +372,7 @@ namespace DesktopUI
             {
 
                 // check if gamekey already exists in our collection
-                var match = ParentVM.CollectionVM.EntireCollection.FirstOrDefault(x => x.GameKey == game.GameKey);
+                var match = LoadedData.MyCollection.FirstOrDefault(x => x.GameKey == game.GameKey);
 
 
                 ownGame.GameKey = game.GameKey;
@@ -367,7 +402,7 @@ namespace DesktopUI
                         {
                             ownGame.Insert();
                             ownGame.MatchingMedia = game;
-                            ParentVM.CollectionVM.EntireCollection.Add(ownGame);
+                            LoadedData.MyCollection.Add(ownGame);
                         }
                         else
                         {
@@ -383,12 +418,12 @@ namespace DesktopUI
                             ownGame.Update(dto);
                             ownGame.MatchingMedia = game;
 
-                            var gameInColl = ParentVM.CollectionVM.EntireCollection.FirstOrDefault(x => x.CollectionKey == match.CollectionKey);
-                            if (ParentVM.CollectionVM.EntireCollection.Contains(gameInColl))
+                            var gameInColl = LoadedData.MyCollection.FirstOrDefault(x => x.CollectionKey == match.CollectionKey);
+                            if (LoadedData.MyCollection.Contains(gameInColl))
                             {
-                                var ndx2 = ParentVM.CollectionVM.EntireCollection.IndexOf(gameInColl);
-                                ParentVM.CollectionVM.EntireCollection.RemoveAt(ndx2);
-                                ParentVM.CollectionVM.EntireCollection.Insert(ndx2, ownGame);
+                                var ndx2 = LoadedData.MyCollection.IndexOf(gameInColl);
+                                LoadedData.MyCollection.RemoveAt(ndx2);
+                                LoadedData.MyCollection.Insert(ndx2, ownGame);
                             }
 
                         }
@@ -404,12 +439,12 @@ namespace DesktopUI
                     ownGame.Update(OgCollectionGameDto);
                     ownGame.MatchingMedia = game;
 
-                    var gameInColl = ParentVM.CollectionVM.EntireCollection.FirstOrDefault(x => x.CollectionKey == ogCollGame.CollectionKey);
-                    if (ParentVM.CollectionVM.EntireCollection.Contains(gameInColl))
+                    var gameInColl = LoadedData.MyCollection.FirstOrDefault(x => x.CollectionKey == ogCollGame.CollectionKey);
+                    if (LoadedData.MyCollection.Contains(gameInColl))
                     {
-                        var ndx2 = ParentVM.CollectionVM.EntireCollection.IndexOf(gameInColl);
-                        ParentVM.CollectionVM.EntireCollection.RemoveAt(ndx2);
-                        ParentVM.CollectionVM.EntireCollection.Insert(ndx2, ownGame);
+                        var ndx2 = LoadedData.MyCollection.IndexOf(gameInColl);
+                        LoadedData.MyCollection.RemoveAt(ndx2);
+                        LoadedData.MyCollection.Insert(ndx2, ownGame);
                     }
 
                     OnPropertyChanged("ParentVM.CollectionVM.DisplayCollectionList");
@@ -425,11 +460,11 @@ namespace DesktopUI
                     var result = MessageBox.Show($"Are you sure you want to remove {OgCollGame.MatchingMedia.Name} from your collection?", "Are you sure?", MessageBoxButton.YesNo);
                     if (result == MessageBoxResult.Yes)
                     {
-                        var gameInColl = ParentVM.CollectionVM.EntireCollection.FirstOrDefault(x => x.CollectionKey == ogCollGame.CollectionKey);
-                        if (ParentVM.CollectionVM.EntireCollection.Contains(gameInColl))
+                        var gameInColl = LoadedData.MyCollection.FirstOrDefault(x => x.CollectionKey == ogCollGame.CollectionKey);
+                        if (LoadedData.MyCollection.Contains(gameInColl))
                         {
-                            var ndx = ParentVM.CollectionVM.EntireCollection.IndexOf(gameInColl);
-                            ParentVM.CollectionVM.EntireCollection.RemoveAt(ndx);
+                            var ndx = LoadedData.MyCollection.IndexOf(gameInColl);
+                            LoadedData.MyCollection.RemoveAt(ndx);
                         }
 
                         CollectionGame.DeleteMedia(OgCollGame);
@@ -496,6 +531,7 @@ namespace DesktopUI
             Price = game.Price;
             YearReleased = game.YearReleased.ToString();
             SelectedRemakeType = RemakeTypeList.FirstOrDefault(x=>x.Key ==  game.RemakeType);
+        //    SelectedSeriesItem = SeriesList.FirstOrDefault(x => x.SeriesKey == game.SeriesKey);
             remakeOf = game.RemakeOf;
         }
 

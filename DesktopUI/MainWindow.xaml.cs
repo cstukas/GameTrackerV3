@@ -54,52 +54,37 @@ namespace DesktopUI
             if (stat?.Name == "") return;
 
             (DataContext as MainVM).TopYearStatsClicked(stat);
-
         }
 
         private void SeriesStatsRow_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            //var item = sender as ListBoxItem;
-            //var stat = item.Content as SeriesStat;
-            //if (stat != null)
-            //{
-            //    MainTabControl.SelectedIndex = 2; // Series Tab
-            //    seriesFilterCombo.SelectedItem = stat.Name;
-            //}
+            var item = sender as ListBoxItem;
+            var stat = item.Content as SeriesStat;
+            if (stat != null)
+            {
+                (DataContext as MainVM).SeriesStatsClicked(stat);
+            }
         }
 
-        public void LoadSeriesStatsList(int sort)
-        {
-            //if (IsOnSeriesStatsTab)
-            //{
-            //    Mouse.OverrideCursor = Cursors.Wait;
 
-            //    if (sort == 1)
-            //        Data.SeriesStats = new SeriesStats("BeatenPercentage");
-            //    else if (sort == 2)
-            //        Data.SeriesStats = new SeriesStats("OwnPercentage");
-            //    if (sort == 3)
-            //        Data.SeriesStats = new SeriesStats("TotalGames");
-
-            //    SeriesStatsListBox.ItemsSource = Data.SeriesStats;
-            //    Mouse.OverrideCursor = null;
-            //}
-        }
 
 
         private void CompletionRadioButton_Checked(object sender, RoutedEventArgs e)
         {
-            LoadSeriesStatsList(1);
+            if(DataContext != null)
+                (DataContext as MainVM).LoadSeriesStatsList(1);
         }
 
         private void OwnedRadioButton_Checked(object sender, RoutedEventArgs e)
         {
-            LoadSeriesStatsList(2);
+            if (DataContext != null)
+                (DataContext as MainVM).LoadSeriesStatsList(2);
         }
 
         private void TotalRadioButton_Checked(object sender, RoutedEventArgs e)
         {
-            LoadSeriesStatsList(3);
+            if (DataContext != null)
+                (DataContext as MainVM).LoadSeriesStatsList(3);
         }
 
    

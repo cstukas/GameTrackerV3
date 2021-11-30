@@ -60,7 +60,7 @@ namespace DesktopUI.TabVMs
         //******************************************
         public void RefreshData(bool onlyFriends = false)
         {
-            var games = ParentVM.CollectionVM.EntireCollection.Where(x => x.Own == 0 && x.Buying == 1 && x.OwnDigitally == 0).OrderBy(x => x.MatchingMedia.Name).ToList();
+            var games = LoadedData.MyCollection.Where(x => x.Own == 0 && x.Buying == 1 && x.OwnDigitally == 0).OrderBy(x => x.MatchingMedia.Name).ToList();
 
             ToBuyGamesList = new List<CollectionGame>();
             TotalPrice = 0;
@@ -68,14 +68,14 @@ namespace DesktopUI.TabVMs
             {
                 var game = games[i];
 
-         //       var matches = ParentVM.CollectionVM.EntireCollection.Where(x => x.MatchingMedia.Name == game.MatchingMedia.Name || x.MatchingMedia.RemakeOf == game.GameKey).ToList();
-                var matches = CollectionGame.GetAllAlikeGames(game.MatchingMedia, ParentVM.CollectionVM.EntireCollection);
+         //       var matches = LoadedData.MyCollection.Where(x => x.MatchingMedia.Name == game.MatchingMedia.Name || x.MatchingMedia.RemakeOf == game.GameKey).ToList();
+                var matches = CollectionGame.GetAllAlikeGames(game.MatchingMedia, LoadedData.MyCollection);
 
                 var own = false;
                 for (int m = 0; m < matches.Count; m++)
                 {
                     var match = matches[m];
-                    var collGame = ParentVM.CollectionVM.EntireCollection.FirstOrDefault(x => x.GameKey == match.GameKey);
+                    var collGame = LoadedData.MyCollection.FirstOrDefault(x => x.GameKey == match.GameKey);
                     if(collGame != null)
                     {
                         if (collGame.Own == 1)

@@ -261,6 +261,7 @@
     <Compile Include="TabVMs\FeedVM.cs" />
     <Compile Include="TabVMs\FriendsVM.cs" />
     <Compile Include="TabVMs\PlayedGameVM.cs" />
+    <Compile Include="TabVMs\SeriesVM.cs" />
     <Compile Include="TabVMs\StatsVM.cs" />
     <Compile Include="TabVMs\ToBuyVM.cs" />
     <Compile Include="TabVMs\ToPlayVM.cs" />

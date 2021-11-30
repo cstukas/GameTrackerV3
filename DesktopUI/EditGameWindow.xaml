@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DesktopUI"
         mc:Ignorable="d"
-        Title="{Binding WindowTitle}" Height="250" Width="350" FontSize="14">
+        Title="{Binding WindowTitle}" Height="270" Width="360" FontSize="14">
     <Grid>
         <StackPanel>
             <Grid Margin="0,15,0,0">
@@ -60,6 +60,13 @@
                 <ComboBox  HorizontalAlignment="Stretch" ItemsSource="{Binding RemakeOfList}" IsEditable="True" Margin="0,0,5,0"
                                     DisplayMemberPath="DisplayString" SelectedValuePath="GameKey"  SelectedValue="{Binding RemakeOf}"/>
             </DockPanel>
+
+            <StackPanel Orientation="Horizontal" Margin="5,5,5,0">
+                <TextBlock Text="Series " Margin="0,0,0,0" Width="45" VerticalAlignment="Center"/>
+                <ComboBox Width="185" ItemsSource="{Binding SeriesList}" DisplayMemberPath="Name" SelectedValuePath="SeriesKey" SelectedValue="{Binding SeriesKey}" />
+                <ComboBox Width="50" Margin="5,0,0,0" ItemsSource="{Binding SeriesTypeList}" DisplayMemberPath="Name" SelectedValuePath="SeriesTypeKey" SelectedValue="{Binding SeriesType}" />
+                <TextBox Width="40" Margin="5,0,0,0" Text="{Binding SeriesOrderNum}"/>
+            </StackPanel>
 
             <Border BorderBrush="LightGray" BorderThickness="0,1,0,0" Margin="5"/>
 

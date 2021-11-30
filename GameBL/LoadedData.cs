@@ -13,10 +13,13 @@ namespace GameBL
 
         public static List<Game> AllGames { get; set; }
         public static PlayedGameList MyPlayedGames { get; set; }
+        public static CollectionGameList MyCollection { get; set; }
         public static List<Percentages> PercentageList { get; set; }
         public static List<Platform> PlatformList { get; set; }
         public static List<Platform> PlatformListWithAll { get; set; }
         public static RemakeTypes RemakeTypeList { get; set; }
+        public static Series SeriesList { get; set; }
+        public static SeriesTypeList SeriesTypeList { get; set; }
 
         public static void Load(int userKey)
         {
@@ -38,6 +41,11 @@ namespace GameBL
 
             RemakeTypeList = new RemakeTypes();
 
+            SeriesList = new Series();
+            SeriesTypeList = new SeriesTypeList();
+
+            MyCollection = new CollectionGameList();
+            MyCollection.LoadCollection(userKey);
         }
 
 

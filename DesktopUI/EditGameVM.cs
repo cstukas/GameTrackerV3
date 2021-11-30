@@ -23,6 +23,9 @@ namespace DesktopUI
         public List<Game> RemakeOfList { get; set; }
         public GenreList Genres { get; set; }
         public RemakeTypes RemakeTypeList { get; set; }
+        public Series SeriesList { get; set; }
+        public SeriesTypeList SeriesTypeList { get; set; }
+
 
         public int GameKey { get; set; }
 
@@ -90,7 +93,16 @@ namespace DesktopUI
         }
 
         public DateTime DateAdded { get; set; }
-        public int SeriesKey { get; set; }
+
+
+        private int seriesKey;
+        public int SeriesKey
+        {
+            get { return seriesKey; }
+            set { seriesKey = value; OnPropertyChanged("SeriesKey"); }
+        }
+
+
         public int SeriesOrderNum { get; set; }
         public int SeriesType { get; set; }
 
@@ -109,6 +121,9 @@ namespace DesktopUI
 
             Genres = Globals.GenreList;
             RemakeTypeList = LoadedData.RemakeTypeList;
+            SeriesList = LoadedData.SeriesList;
+            SeriesTypeList = LoadedData.SeriesTypeList;
+
 
             OgGame = Utilities.General.Map<Game, GameDto>(game);
 
@@ -124,7 +139,10 @@ namespace DesktopUI
             RemakeType = game.RemakeType;
             DateAdded = game.DateAdded;
             SeriesKey = game.SeriesKey;
-            SeriesOrderNum = game.SeriesOrderNum;
+
+            if(game.SeriesOrderNum > 0)
+                SeriesOrderNum = game.SeriesOrderNum / 100;
+
             SeriesType = game.SeriesType;
 
         }
@@ -151,7 +169,7 @@ namespace DesktopUI
             g.RemakeType = RemakeType;
             g.DateAdded = DateAdded;
             g.SeriesKey = SeriesKey;
-            g.SeriesOrderNum = SeriesOrderNum;
+            g.SeriesOrderNum = SeriesOrderNum * 100;
             g.SeriesType = SeriesType;
 
             Game.UpdateGame(OgGame, g);

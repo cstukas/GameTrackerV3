@@ -264,7 +264,7 @@
                                 </ListBox.ItemTemplate>
                             </ListBox>
                         </TabItem>
-                        
+
 
                     </TabControl>
 
@@ -305,7 +305,7 @@
                                 Content="{Binding AddRemoveFriendString}" Command="{Binding AddRemoveFriendCommand}" 
                                 Width="90" FontSize="10" Margin="2,3,2,3" HorizontalAlignment="Right" Grid.Column="2"/>
 
-                 
+
                     <DataGrid ItemsSource="{Binding PlayedGameList}" SelectedItem="{Binding SelectedPlayedGame}"  SelectionMode="Single"
                               IsReadOnly="True" Grid.Row="1" AutoGenerateColumns="False" Grid.ColumnSpan="1">
                         <DataGrid.InputBindings>
@@ -325,7 +325,7 @@
 
                             <DataGridTextColumn Header="Percent" Width="115" Binding="{Binding PercentCompleted, Converter={StaticResource PercentageKeyToNameConverter}}" />
                             <DataGridTextColumn Header="Rating" Width="125" Binding="{Binding Rating, Converter={StaticResource RatingKeyToName}}" />
-                            
+
                             <DataGridTextColumn Header="Gap" Width="40" Binding="{Binding Gap}" />
                             <DataGridTextColumn Header="Og" Width="40" Binding="{Binding OgGap}" />
 
@@ -425,6 +425,107 @@
             </TabItem>
 
             <TabItem Header="Series" Width="90"  DataContext="{Binding SeriesVM}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="100"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="3*" MinHeight="100"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="30"/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Orientation="Horizontal" Grid.ColumnSpan="4">
+
+                        <ComboBox ItemsSource="{Binding SeriesList}" SelectedItem="{Binding SelectedSeries}" DisplayMemberPath="Name"  Margin="5,5,5,5" Width="150"  Grid.Column="0"  />
+
+                    </StackPanel>
+
+                    <Button Content="Manage Series" Margin="5" Width="120" HorizontalAlignment="Right" Grid.Column="0" Grid.ColumnSpan="2" />
+
+
+                    <DataGrid ItemsSource="{Binding SeriesGames}" SelectedItem="{Binding SelectedSeriesGame}" Grid.Row="1" VerticalContentAlignment="Center" IsReadOnly="True" AutoGenerateColumns="False" SelectionMode="Single"  Grid.ColumnSpan="1">
+                        <DataGrid.InputBindings>
+                            <MouseBinding Gesture="LeftDoubleClick" Command="{Binding GameClickedCommand}"/>
+                        </DataGrid.InputBindings>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Name" Width="300" Binding="{Binding Name}" />
+                            <DataGridTextColumn Header="Year" Width="50" Binding="{Binding YearReleased}" />
+                            <DataGridTextColumn Header="Platform" Width="100" Binding="{Binding Platform, Converter={StaticResource PlatformKeyToNameConverter}}" />
+                            <DataGridTextColumn Header="H" Width="35" Binding="{Binding HoursToBeat}" />
+                            <DataGridTextColumn Header="Dim" Width="50" Binding="{Binding SeriesType}" />
+                            <DataGridTextColumn Header="Order" Width="90" Binding="{Binding SeriesOrderNum}" />
+                            <DataGridTextColumn Header="Own" Width="80" Binding="{Binding Own}" />
+                            <DataGridTextColumn Header="Beaten" Width="80" Binding="{Binding TimesBeat}" />
+                        </DataGrid.Columns>
+
+                        <DataGrid.RowStyle>
+                            <Style TargetType="DataGridRow">
+                                <Setter Property="Background" Value="{Binding Color}"/>
+                            </Style>
+                        </DataGrid.RowStyle>
+
+                    </DataGrid>
+
+                    <GridSplitter Grid.Row="2" Height="10" HorizontalAlignment="Stretch" Margin="0,2,0,0" Grid.ColumnSpan="3"/>
+
+                    <DataGrid ItemsSource="{Binding SeriesPlayedGames}" SelectedItem="{Binding SelectedPlayedGame}" RowHeight="20" Grid.Row="3" VerticalContentAlignment="Center" IsReadOnly="True" AutoGenerateColumns="False" 
+                              SelectionMode="Single" Grid.ColumnSpan="3" Margin="0,2,0,0">
+                        <DataGrid.InputBindings>
+                            <MouseBinding Gesture="LeftDoubleClick" Command="{Binding MediaClickedCommand}"/>
+                        </DataGrid.InputBindings>
+                        <DataGrid.Columns>
+                            <DataGridCheckBoxColumn Header="B" Binding="{Binding Beaten}" />
+                            <DataGridTextColumn Header="Name" Width="*" Binding="{Binding MatchingMedia.Name}" />
+                            <DataGridTextColumn Header="Platform" Width="90" Binding="{Binding PlatformPlayedOn, Converter={StaticResource PlatformKeyToNameConverter}}" />
+                            <DataGridTextColumn Header="Genre" Width="75" Binding="{Binding MatchingMedia.Genre1, Converter={StaticResource GenreKeyToNameConverter}}" />
+                            <DataGridTextColumn Header="Percent" Width="135" Binding="{Binding PercentCompleted, Converter={StaticResource PercentageKeyToNameConverter}}" />
+                            <DataGridTextColumn Header="H" Width="35" Binding="{Binding Hours}" />
+
+                            <DataGridTextColumn Header="Year" Width="50" Binding="{Binding DateAdded, Converter={StaticResource DateTimeConverter}, ConverterParameter=4}" />
+                            <DataGridTextColumn Header="Month" Width="80" Binding="{Binding MonthName}" />
+
+                            <!--<DataGridTextColumn Header="Gap" Width="40" Binding="{Binding Gap}" />
+                            <DataGridTextColumn Header="Og" Width="40" Binding="{Binding OgGap}" />-->
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    
+                    <StackPanel Grid.Row="1" Grid.Column="3" Orientation="Vertical" VerticalAlignment="Top" Margin="10,5,10,0" HorizontalAlignment="Center">
+                        <Button Content="Higher" Width="70" Height="24" Margin="0,5,0,10" Command="{Binding SeriesOrderCommand}" CommandParameter="up" />
+                        <Button Content="Lower"  Height="24" Command="{Binding SeriesOrderCommand}" CommandParameter="down"  />
+
+                    </StackPanel>
+
+                    <StackPanel Visibility="Hidden" Grid.Row="1" Grid.RowSpan="2" Grid.Column="3" Orientation="Vertical" VerticalAlignment="Bottom" Margin="44,0,40,0" HorizontalAlignment="Center">
+                        <TextBlock Text="Beat" HorizontalAlignment="Center" FontSize="24" FontWeight="Bold" Margin="5"/>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding SelectedSeries.GamesBeat}" HorizontalAlignment="Center" FontSize="22" Margin="5"/>
+                            <TextBlock Text="{Binding SelectedSeries.BeatPercentage}" HorizontalAlignment="Center" FontSize="22" Margin="5"/>
+
+                        </StackPanel>
+
+                        <TextBlock Text="Own" HorizontalAlignment="Center" FontSize="24" FontWeight="Bold" Margin="5,30,5,5"/>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding SelectedSeries.GamesOwned}" HorizontalAlignment="Center" FontSize="22" Margin="5"/>
+                            <TextBlock Text="{Binding SelectedSeries.OwnPercentage}" HorizontalAlignment="Center" FontSize="22" Margin="5"/>
+                        </StackPanel>
+
+                        <TextBlock Text="Total" HorizontalAlignment="Center" FontSize="24" FontWeight="Bold" Margin="5,30,5,5"/>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding SelectedSeries.TotalGames}" HorizontalAlignment="Center" FontSize="22" Margin="5"/>
+                        </StackPanel>
+
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="4" Margin="5,1" VerticalAlignment="Center" Grid.ColumnSpan="3">
+                        <Button Content="Edit" Margin="4" Width="75" HorizontalAlignment="Left" />
+                    </StackPanel>
+                </Grid>
+
+
 
             </TabItem>
 
@@ -442,7 +543,7 @@
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="{Binding GameCount}" FontSize="16" VerticalAlignment="Center" Margin="5,0,0,0"/>
                     </StackPanel>
-                    
+
                     <DataGrid ItemsSource="{Binding ToPlayGamesList}" IsReadOnly="True" AutoGenerateColumns="False" Grid.Row="1" SelectionMode="Single">
                         <DataGrid.Columns>
 
@@ -466,7 +567,7 @@
                             <DataGridTextColumn Header="RemakeType" Width="100" Binding="{Binding MatchingMedia.RemakeType}"/>
                             <DataGridTextColumn Header="RemakeOf" Width="100" Binding="{Binding MatchingMedia.RemakeOf}"/>
 
-                            
+
                         </DataGrid.Columns>
                     </DataGrid>
 
@@ -492,10 +593,10 @@
 
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="{Binding GameCount}" FontSize="16" VerticalAlignment="Center" Margin="5,0,0,0" Width="40"/>
-                        
+
                         <TextBlock Text="$" FontSize="16" VerticalAlignment="Center" Margin="25,0,0,0"/>
                         <TextBlock Text="{Binding TotalPrice}" FontSize="16" VerticalAlignment="Center" Margin="0,0,0,0" Width="40"/>
-                        
+
                     </StackPanel>
 
                     <DataGrid ItemsSource="{Binding ToBuyGamesList}" SelectedItem="{Binding SelectedCollectionMedia}" IsReadOnly="True" AutoGenerateColumns="False" Grid.Row="1" SelectionMode="Single">
@@ -662,7 +763,7 @@
             <TextBlock Text="Completion: " FontWeight="Bold" FontSize="18" VerticalAlignment="Bottom" />
             <TextBlock Text="{Binding CompletionString}" FontWeight="Bold" FontSize="18" VerticalAlignment="Bottom" />
         </StackPanel>
-        
+
         <StackPanel Grid.Column="1" Grid.Row="3">
             <StackPanel  Orientation="Horizontal" Margin="0,0,0,0">
                 <TextBlock Text="Total Games:"  Width="115" FontSize="14" VerticalAlignment="Bottom" />
@@ -793,25 +894,26 @@
                         <RadioButton GroupName="seriesSortRB" IsChecked="True" VerticalContentAlignment="Center" Margin="15,0,0,0" Content="Beaten %" Checked="CompletionRadioButton_Checked"/>
                         <RadioButton GroupName="seriesSortRB" VerticalContentAlignment="Center" Content="Owned %" Margin="15,0,0,0" Checked="OwnedRadioButton_Checked"/>
                     </StackPanel>
-                    
-                    <ListBox Name="SeriesStatsListBox" Margin="0,1,0,0" Grid.Row="1" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible" FontSize="12">
+
+                    <ListBox ItemsSource="{Binding SeriesStatsList}" SelectedItem="{Binding SelectedSeriesStat}" Margin="0,1,0,0" Grid.Row="1" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible" FontSize="12">
                         <ListBox.Resources>
                             <Style TargetType="ListBoxItem">
                                 <EventSetter Event="MouseDoubleClick" Handler="SeriesStatsRow_MouseDoubleClick"/>
                             </Style>
                         </ListBox.Resources>
+
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <Grid Margin="0">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="105"/>
-                                        <ColumnDefinition Width="10"/>
+                                        <ColumnDefinition Width="12"/>
                                         <ColumnDefinition Width="auto"/>
-                                        <ColumnDefinition Width="10"/>
+                                        <ColumnDefinition Width="12"/>
                                         <ColumnDefinition Width="auto"/>
-                                        <ColumnDefinition Width="10"/>
+                                        <ColumnDefinition Width="12"/>
 
-                                        <ColumnDefinition Width="20"/>
+                                        <ColumnDefinition Width="15"/>
 
                                         <ColumnDefinition Width="30"/>
                                         <ColumnDefinition Width="auto"/>
