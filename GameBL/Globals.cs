@@ -9,7 +9,7 @@ namespace GameBL
     public static class Globals
     {
         public static bool SkipLogin { get; set; } = true;
-        public static string SkipLoginUser { get; set; } = "anthony";
+        public static string SkipLoginUser { get; set; } = "craig";
         public static bool RefreshPlayed { get; set; } = false;
         public static bool RefreshCollection { get; set; } = false;
         public static bool UpdateAvailable { get; set; } = false;
