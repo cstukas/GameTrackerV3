@@ -121,7 +121,14 @@ namespace DesktopUI
 
             Genres = Globals.GenreList;
             RemakeTypeList = LoadedData.RemakeTypeList;
-            SeriesList = LoadedData.SeriesList;
+
+            SeriesList = Utilities.General.CloneList(LoadedData.SeriesList);
+
+            var emptySeriesItem = new SeriesItem();
+            emptySeriesItem.SeriesKey = 0;
+            emptySeriesItem.Name = "";
+            SeriesList.Insert(0, emptySeriesItem);
+
             SeriesTypeList = LoadedData.SeriesTypeList;
 
 

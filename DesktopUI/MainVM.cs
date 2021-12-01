@@ -661,6 +661,8 @@ namespace DesktopUI
         // View Media
         public void ViewMedia(Game game)
         {
+            if (game.GameKey == 0) return;
+
             Mouse.OverrideCursor = Cursors.Wait;
             var nextWindow = new ReadGameWindow(this, game);
             nextWindow.ShowDialog();

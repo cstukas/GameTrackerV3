@@ -453,13 +453,13 @@
                         </DataGrid.InputBindings>
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Name" Width="300" Binding="{Binding Name}" />
-                            <DataGridTextColumn Header="Year" Width="50" Binding="{Binding YearReleased}" />
+                            <DataGridTextColumn Header="Year" Width="50" Binding="{Binding YearReleased, Converter={StaticResource ShowIntIfNotZeroConverter}}" />
                             <DataGridTextColumn Header="Platform" Width="100" Binding="{Binding Platform, Converter={StaticResource PlatformKeyToNameConverter}}" />
-                            <DataGridTextColumn Header="H" Width="35" Binding="{Binding HoursToBeat}" />
-                            <DataGridTextColumn Header="Dim" Width="50" Binding="{Binding SeriesType}" />
-                            <DataGridTextColumn Header="Order" Width="90" Binding="{Binding SeriesOrderNum}" />
-                            <DataGridTextColumn Header="Own" Width="80" Binding="{Binding Own}" />
-                            <DataGridTextColumn Header="Beaten" Width="80" Binding="{Binding TimesBeat}" />
+                            <DataGridTextColumn Header="H" Width="35" Binding="{Binding HoursToBeat, Converter={StaticResource ShowIntIfNotZeroConverter}}" />
+                            <DataGridTextColumn Header="Dim" Width="50" Binding="{Binding SeriesType, Converter={StaticResource DimensionTypeToNameConverter}}"  />
+                            <DataGridTextColumn Header="Order" Width="90" Binding="{Binding SeriesOrderNum, Converter={StaticResource ShowIntIfNotZeroConverter}}" />
+                            <DataGridTextColumn Header="Own" Width="80" Binding="{Binding Own, Converter={StaticResource ShowIntIfNotZeroConverter}}" />
+                            <DataGridTextColumn Header="Beaten" Width="80" Binding="{Binding TimesBeat, Converter={StaticResource ShowIntIfNotZeroConverter}}" />
                         </DataGrid.Columns>
 
                         <DataGrid.RowStyle>

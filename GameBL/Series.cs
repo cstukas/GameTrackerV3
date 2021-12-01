@@ -8,6 +8,7 @@ using DataAccess;
 
 namespace GameBL
 {
+    [Serializable]
     public class SeriesItem
     {
         public int SeriesKey { get; set; }
@@ -15,6 +16,7 @@ namespace GameBL
         public string Subscribers { get; set; }
     }
 
+    [Serializable]
     public class Series : ObservableCollection<SeriesItem>
     {
         public Series()
@@ -26,10 +28,6 @@ namespace GameBL
                 this.Add(series[i]);
             }
 
-            //var empty = new SeriesItem();
-            //empty.SeriesKey = 0;
-            //empty.Name = "";
-            //this.Insert(0, empty);
         }
     }
 

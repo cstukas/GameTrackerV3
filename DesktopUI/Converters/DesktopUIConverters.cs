@@ -173,4 +173,23 @@ namespace DesktopUI.Converters
             throw new NotImplementedException();
         }
     }
+
+    class DimensionTypeToNameConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            var dimType = (int)value;
+            if (dimType == 1)
+                return "2D";
+            else if (dimType == 2)
+                return "3D";
+            else
+                return "";
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

@@ -27,5 +27,6 @@
     <converters:DateAddedToMonthConverter x:Key="DateAddedToMonthConverter"/>
     <converters:GameKeyToNameConverter x:Key="GameKeyToNameConverter"/>
     <converters:RemakeTypeKeyToNameConverter x:Key="RemakeTypeKeyToNameConverter"/>
+    <converters:DimensionTypeToNameConverter x:Key="DimensionTypeToNameConverter"/>
 
 </ResourceDictionary>

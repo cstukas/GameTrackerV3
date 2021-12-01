@@ -11,6 +11,7 @@ namespace GameBL
     {
         public int TimesBeat { get; set; }
         public int Own { get; set; }
+        public int OwnDigitally { get; set; }
         public string Color { get; set; }
 
 

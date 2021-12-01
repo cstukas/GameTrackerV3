@@ -148,6 +148,9 @@ namespace DesktopUI.TabVMs
             }
 
             SeriesGames.Clear();
+            var twoDGames = new List<SeriesGame>();
+            var threeDGames = new List<SeriesGame>();
+
             for (int i = 0; i < games.Count; i++)
             {
                 var game = games[i];
@@ -155,7 +158,10 @@ namespace DesktopUI.TabVMs
 
                 var collGames = LoadedData.MyCollection.Where(x => x.GameKey == game.GameKey || x.MatchingMedia.RemakeOf == game.GameKey).ToList();
 
+                
+
                 seriesGame.Own = 0;
+                seriesGame.OwnDigitally = 0;
                 seriesGame.TimesBeat = 0;
                 for (int j = 0; j < collGames.Count; j++)
                 {
@@ -163,12 +169,15 @@ namespace DesktopUI.TabVMs
                     if (collGame.Own > 0)
                         seriesGame.Own = 1;
 
+                    if (collGame.OwnDigitally > 0)
+                        seriesGame.OwnDigitally = 1;
+
                     seriesGame.TimesBeat = collGame.TimesBeat;
                 }
 
                 seriesGame.Color = "White";
 
-                if (seriesGame.Own > 0)
+                if (seriesGame.Own > 0 || seriesGame.OwnDigitally > 0)
                     seriesGame.Color = "LightGreen";
 
                 if (seriesGame.TimesBeat > 0)
@@ -189,12 +198,30 @@ namespace DesktopUI.TabVMs
 
                 }
 
-                if (seriesGame.Own == 0 && seriesGame.TimesBeat > 0)
+                if (seriesGame.Own == 0 && seriesGame.OwnDigitally == 0 && seriesGame.TimesBeat > 0)
                     seriesGame.Color = "LightSkyBlue";
 
+                if (seriesGame.SeriesType == 1)
+                    twoDGames.Add(seriesGame);
+                else
+                    threeDGames.Add(seriesGame);
+            }
 
+            // add to main list
+            for (int twoD = 0; twoD < twoDGames.Count; twoD++)
+            {
+                SeriesGames.Add(twoDGames[twoD]);
+            }
 
-                SeriesGames.Add(seriesGame);
+            if(twoDGames.Count > 0 && threeDGames.Count > 0)
+            {
+                var emptyGame = new SeriesGame();
+                SeriesGames.Add(emptyGame);
+            }
+
+            for (int threeD = 0; threeD < threeDGames.Count; threeD++)
+            {
+                SeriesGames.Add(threeDGames[threeD]);
             }
         }
 
