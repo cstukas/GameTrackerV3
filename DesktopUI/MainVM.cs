@@ -722,6 +722,7 @@ namespace DesktopUI
 
                 CollectionVM.OwnedGames = true;
                 CollectionVM.DigitalGames = false;
+                CollectionVM.RomGames = false;
                 CollectionVM.ExtraGames = false;
                 CollectionVM.DontOwnedGames = false;
 

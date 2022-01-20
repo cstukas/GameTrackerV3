@@ -18,9 +18,6 @@ namespace DesktopUI
         private readonly BackgroundWorker worker;
         public event EventHandler CloseWindowEvent;
 
-
-        public string WindowTitle { get { return $"G&S Executive"; } }
-
         private string loadingStatus = "";
         public string LoadingStatus
         {
@@ -43,7 +40,6 @@ namespace DesktopUI
         {
             WindowContext = SynchronizationContext.Current;
             Mouse.OverrideCursor = Cursors.AppStarting;
-
 
             worker = new BackgroundWorker();
             worker.DoWork += Worker_DoWork;

@@ -78,6 +78,14 @@ namespace DesktopUI.TabVMs
             set { digitalGames = value; OnPropertyChanged("DigitalGames"); }
         }
 
+        private bool romGames;
+        public bool RomGames
+        {
+            get { return romGames; }
+            set { romGames = value; OnPropertyChanged("RomGames"); }
+        }
+
+
         private bool extraGames;
         public bool ExtraGames
         {
@@ -175,23 +183,58 @@ namespace DesktopUI.TabVMs
             if (SelectedPlatform.PlatformKey != 0)
               allCollection = MyCollection.Where(x=>x.MatchingMedia.Platform == SelectedPlatform.PlatformKey).ToList();
 
-            var allOwned = allCollection.Where(x => x.Own == 1).ToList();
-            var owned = allOwned.Where(x => x.Playing == 1).ToList();
-            var digital = allCollection.Where(x => x.OwnDigitally == 1).ToList();
-            var extra = allOwned.Where(x => x.Playing == 0).ToList();
-            var dontOwned = allCollection.Where(x => x.Own == 0 && x.OwnDigitally == 0).ToList();
+            List<CollectionGame> collection;
+            if(extraGames)
+            {
+                collection = allCollection.Where(x => x.Playing == 0).ToList();
+            }
+            else
+            {
+                collection = allCollection.Where(x => x.Playing == 1).ToList();
+            }
 
-            if (OwnedGames)
-                listToShow.AddRange(owned);
+            if(DontOwnedGames)
+            {
+                var set = allCollection.Where(x => x.Own == 0 && x.OwnDigitally == 0).ToList();
+                listToShow.AddRange(set);
+            }
 
-            if (DigitalGames)
-                listToShow.AddRange(digital);
+            if (OwnedGames && !DigitalGames && !RomGames)
+            {
+                var set = collection.Where(x => x.Own == 1).ToList();
+                listToShow.AddRange(set);
+            }
+            else if (OwnedGames && DigitalGames && !RomGames)
+            {
+                var set = collection.Where(x => x.Own == 1 || x.OwnDigitally == 1).ToList();
+                listToShow.AddRange(set);
+            }
+            else if (OwnedGames && DigitalGames && RomGames)
+            {
+                var set = collection.Where(x => x.Own == 1 || x.OwnDigitally == 1 || x.Rom == 1).ToList();
+                listToShow.AddRange(set);
+            }
+            else if (OwnedGames && !DigitalGames && RomGames)
+            {
+                var set = collection.Where(x => x.Own == 1 || x.Rom == 1).ToList();
+                listToShow.AddRange(set);
+            }
+            else if (!OwnedGames && DigitalGames && !RomGames)
+            {
+                var set = collection.Where(x => x.OwnDigitally == 1).ToList();
+                listToShow.AddRange(set);
+            }
+            else if (!OwnedGames && DigitalGames && RomGames)
+            {
+                var set = collection.Where(x => x.OwnDigitally == 1 || x.Rom == 1).ToList();
+                listToShow.AddRange(set);
+            }
+            else if (!OwnedGames && !DigitalGames && RomGames)
+            {
+                var set = collection.Where(x => x.Rom == 1).ToList();
+                listToShow.AddRange(set);
+            }
 
-            if (ExtraGames)
-                listToShow.AddRange(extra);
-
-            if (DontOwnedGames)
-                listToShow.AddRange(dontOwned);
 
             listToShow = listToShow.OrderBy(x => x.MatchingMedia.Name).ToList();
 
@@ -224,6 +267,7 @@ namespace DesktopUI.TabVMs
             var orderedList = games.OrderBy(x => x.MatchingMedia.YearReleased);
             var earliestYear = orderedList.First().MatchingMedia.YearReleased;
 
+            var foundOldest = false;
             for (int i = DateTime.Now.Year; i >= earliestYear; i--)
             {
                 var thisYear = games.Where(x => x.MatchingMedia?.YearReleased == i).ToList();
@@ -232,9 +276,22 @@ namespace DesktopUI.TabVMs
                 stat.Name = i.ToString();
                 stat.Value = thisYear.Count.ToString();
 
-                stats.Add(stat);
+                if(thisYear.Count != 0)
+                {
+                    foundOldest = true;
+                }
+
+                if(foundOldest)
+                {
+                    stats.Add(stat);
+                }
+
 
             }
+
+         
+
+
 
             return stats;
         }

@@ -72,6 +72,14 @@ namespace GameBL
             };
             this.Add(type4);
 
+            var type5 = new RemakeType
+            {
+                Key = 5,
+                Type = "Rom Hack",
+                TypeDescription = "A fan-made Rom Hack"
+            };
+            this.Add(type5);
+
         }
 
     }

@@ -112,6 +112,7 @@
                     <StackPanel Orientation="Horizontal" >
                         <CheckBox Content="Own"  IsChecked="{Binding Own}" Margin="0,0,0,0" VerticalAlignment="Center" FontSize="14"/>
                         <CheckBox Content="Own Digitally"  IsChecked="{Binding OwnDigitally}" Margin="20,0,0,0" VerticalAlignment="Center" FontSize="14"/>
+                        <CheckBox Content="Rom"  IsChecked="{Binding Rom}" Margin="20,0,0,0" VerticalAlignment="Center" FontSize="14"/>
                         <CheckBox Content="Buying"  IsChecked="{Binding Buying}" Margin="20,0,15,0" VerticalAlignment="Center" FontSize="14"/>
 
                     </StackPanel>

@@ -15,6 +15,7 @@ namespace GameBL
         public string Status { get; set; }
         public int Own { get; set; }
         public int OwnDigitally { get; set; }
+        public int Rom { get; set; }
         public int Playing { get; set; }
         public int Buying { get; set; }
         public string Reason { get; set; }
@@ -78,6 +79,14 @@ namespace GameBL
             get { return owndigitally; }
             set { owndigitally = value; OnPropertyChanged("OwnDigitally"); }
         }
+
+        private int rom;
+        public int Rom
+        {
+            get { return rom; }
+            set { rom = value; OnPropertyChanged("Rom"); }
+        }
+
 
         private int playing;
         public int Playing

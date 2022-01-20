@@ -177,6 +177,13 @@ namespace DesktopUI
             set { ownDigitally = value; OnPropertyChanged("OwnDigitally"); }
         }
 
+        private bool rom;
+        public bool Rom
+        {
+            get { return rom; }
+            set { rom = value; OnPropertyChanged("Rom"); }
+        }
+
         private bool playing;
         public bool Playing
         {
@@ -266,6 +273,7 @@ namespace DesktopUI
                 {
                     Own = Utilities.General.IntToBool(collGame.Own);
                     OwnDigitally = Utilities.General.IntToBool(collGame.OwnDigitally);
+                    Rom = Utilities.General.IntToBool(collGame.Rom);
                     Buying = Utilities.General.IntToBool(collGame.Buying);
                     Playing = Utilities.General.IntToBool(collGame.Playing);
                     Reason = collGame.Reason;
@@ -376,7 +384,7 @@ namespace DesktopUI
 
             // Collection Object
             var ownGame = new CollectionGame();
-            if (Own || OwnDigitally || Buying)
+            if (Own || OwnDigitally || Buying || Rom)
             {
 
                 // check if gamekey already exists in our collection
@@ -388,6 +396,7 @@ namespace DesktopUI
                 ownGame.Status = Status;
                 ownGame.Own = Utilities.General.BoolToInt(Own);
                 ownGame.OwnDigitally = Utilities.General.BoolToInt(OwnDigitally);
+                ownGame.Rom = Utilities.General.BoolToInt(Rom);
                 ownGame.Playing = Utilities.General.BoolToInt(Playing);
                 ownGame.Buying = Utilities.General.BoolToInt(Buying);
                 ownGame.Reason = Reason;

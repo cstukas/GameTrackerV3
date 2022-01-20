@@ -194,8 +194,9 @@
 
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Grid.ColumnSpan="2" Margin="5,2,0,2" >
                         <TextBlock Text="{Binding MediaCount}"  VerticalAlignment="Center" Width="40"/>
-                        <CheckBox Content="Owned Games" IsChecked="{Binding OwnedGames}" Margin="00,0,0,0" VerticalContentAlignment="Center"/>
-                        <CheckBox Content="Digital Games" IsChecked="{Binding DigitalGames}" Margin="20,0,0,0" VerticalContentAlignment="Center"/>
+                        <CheckBox Content="Physical" IsChecked="{Binding OwnedGames}" Margin="00,0,0,0" VerticalContentAlignment="Center"/>
+                        <CheckBox Content="Digital" IsChecked="{Binding DigitalGames}" Margin="20,0,0,0" VerticalContentAlignment="Center"/>
+                        <CheckBox Content="Roms" IsChecked="{Binding RomGames}" Margin="20,0,0,0" VerticalContentAlignment="Center"/>
                         <CheckBox Content="Extra Games" IsChecked="{Binding ExtraGames}" Margin="20,0,0,0" VerticalContentAlignment="Center"/>
                         <CheckBox Content="Dont Owned Games" IsChecked="{Binding DontOwnedGames}" Margin="20,0,0,0" VerticalContentAlignment="Center"/>
 
@@ -225,6 +226,7 @@
                             <DataGridTextColumn Header="Hours" Width="50" Binding="{Binding MatchingMedia.HoursToBeat}" />
                             <DataGridCheckBoxColumn Header="Own"  Binding="{Binding Own}"/>
                             <DataGridCheckBoxColumn Header="Digi" Binding="{Binding OwnDigitally}"/>
+                            <DataGridCheckBoxColumn Header="Rom" Binding="{Binding Rom}"/>
                             <DataGridCheckBoxColumn Header="P" Binding="{Binding Playing}"/>
 
 
