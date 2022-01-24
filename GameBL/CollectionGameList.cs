@@ -89,6 +89,7 @@ namespace GameBL
                     var beatenCount = 0;
                     bool finished = false;
 
+
                     // Find OG Game
                     var ogs = collection.Where(x => x.GameKey == cm.MatchingMedia?.RemakeOf).ToList();
 
@@ -102,10 +103,12 @@ namespace GameBL
                         ogGame = ogs[0];
                     }
 
-                    var allAlikeGames = collection.Where(x => x.MatchingMedia?.RemakeOf == ogGame.GameKey || x.MatchingMedia?.Name.ToLower() == ogGame.MatchingMedia.Name.ToLower()).ToList();
+                    // todo change this from collection to ALL games
+                    //        var allAlikeGames = collection.Where(x => x.MatchingMedia?.RemakeOf == ogGame.GameKey || x.MatchingMedia?.Name.ToLower() == ogGame.MatchingMedia.Name.ToLower()).ToList();
+                    var allAlikeGames = LoadedData.AllGames.Where(x => x.RemakeOf == ogGame.GameKey || x.Name.ToLower() == ogGame.MatchingMedia.Name.ToLower()).ToList();
 
-                    if(allAlikeGames.Where(x=>x.CollectionKey == ogGame.CollectionKey).ToList().Count == 0)
-                        allAlikeGames.Add(ogGame);
+                    if (allAlikeGames.Where(x=>x.GameKey == ogGame.GameKey).ToList().Count == 0)
+                        allAlikeGames.Add(ogGame.MatchingMedia);
 
                     for (int ag = 0; ag < allAlikeGames.Count; ag++)
                     {

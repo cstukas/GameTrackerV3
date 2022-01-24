@@ -76,7 +76,7 @@
 
         <TabControl Grid.Row="3" Grid.Column="0" Grid.RowSpan="2" SelectedIndex="{Binding SelectedTabIndex, Mode=TwoWay}" Margin="5,0,5,5">
             <TabItem Header="Feed" Width="90" DataContext="{Binding FeedVM}">
-                <ListBox Margin="5" HorizontalContentAlignment="Stretch" SelectionMode="Extended"
+                <ListBox Margin="5" HorizontalContentAlignment="Stretch" SelectionMode="Extended" 
                          ItemsSource="{Binding FeedList}" Background="Transparent" BorderBrush="Transparent" BorderThickness="1" 
                          ScrollViewer.HorizontalScrollBarVisibility="Disabled" FontSize="12">
 
@@ -298,7 +298,9 @@
                         <CheckBox Content="Only Beaten Games" IsChecked="{Binding OnlyBeatenGames}"  Margin="15,0,0,0" VerticalContentAlignment="Center"/>
 
                         <ComboBox Margin="15,0,0,0" Width="120" ItemsSource="{Binding PlatformList}" SelectedItem="{Binding SelectedPlatform}" DisplayMemberPath="Name"/>
-                        <ComboBox Margin="15,0,0,0" Width="80" ItemsSource="{Binding YearList}" SelectedValue="{Binding SelectedYear}" />
+                        <CheckBox Content="Played On" VerticalAlignment="Center" Margin="2,0,0,0" IsChecked="{Binding PlayedOnIsChecked}"/>
+
+                        <ComboBox Margin="35,0,0,0" Width="80" ItemsSource="{Binding YearList}" SelectedValue="{Binding SelectedYear}" />
                         <Button Content="Refresh" Margin="30,0,0,0" Command="{Binding RefreshCommand}" />
 
                     </StackPanel>
@@ -315,8 +317,8 @@
                         </DataGrid.InputBindings>
                         <DataGrid.Columns>
                             <DataGridCheckBoxColumn Header="B" Binding="{Binding Beaten}"/>
-                            <DataGridTextColumn Header="Name" Width="280" Binding="{Binding MatchingMedia.Name}" />
-                            <DataGridTextColumn Header="Played" Width="80" Binding="{Binding PlatformPlayedOn, Converter={StaticResource PlatformKeyToNameConverter}}" />
+                            <DataGridTextColumn Header="Name" Width="290" Binding="{Binding MatchingMedia.Name}" />
+                            <DataGridTextColumn Header="Version" Width="80" Binding="{Binding MatchingMedia.Platform, Converter={StaticResource PlatformKeyToNameConverter}}" />
                             <DataGridTextColumn Header="Genre" Width="75" Binding="{Binding MatchingMedia.Genre1, Converter={StaticResource GenreKeyToNameConverter}}" />
                             <!--<DataGridTextColumn Header="Genre" Width="75" Binding="{Binding MatchingMedia.Genre2, Converter={StaticResource GenreKeyToNameConverter}}" />-->
                             <DataGridTextColumn Header="H" Width="30" Binding="{Binding Hours}" />
@@ -330,6 +332,8 @@
 
                             <DataGridTextColumn Header="Gap" Width="40" Binding="{Binding Gap}" />
                             <DataGridTextColumn Header="Og" Width="40" Binding="{Binding OgGap}" />
+
+                            <DataGridTextColumn Header="Played" Width="80" Binding="{Binding PlatformPlayedOn, Converter={StaticResource PlatformKeyToNameConverter}}" />
 
                             <DataGridTextColumn Header="Date" Width="80" Binding="{Binding DateAdded, Converter={StaticResource DateTimeConverter}}" />
 

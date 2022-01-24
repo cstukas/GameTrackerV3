@@ -111,6 +111,13 @@ namespace DesktopUI.TabVMs
             get { return showKeys; }
             set { showKeys = value; OnPropertyChanged("ShowKeys"); }
         }
+        
+        private bool playedOnIsChecked;
+        public bool PlayedOnIsChecked
+        {
+            get { return playedOnIsChecked; }
+            set { playedOnIsChecked = value; OnPropertyChanged("PlayedOnIsChecked"); }
+        }
 
         public PlayedGameVM(MainVM parentVM)
             : base(parentVM)
@@ -120,6 +127,7 @@ namespace DesktopUI.TabVMs
             this.AddRemoveFriendCommand = new DelegateCommand<object>(this.OnAddRemoveFriend);
 
             OnlyBeatenGames = true;
+            PlayedOnIsChecked = false;
 
             PlatformList = LoadedData.PlatformListWithAll;
             if (PlatformList.Count > 0)
@@ -156,7 +164,7 @@ namespace DesktopUI.TabVMs
             
             var userKey = SelectedUser.UserKey;
             if (userKey == Utilities.UserUtils.CurrentUser.UserKey)
-                PlayedGameList = PlayedGameList.LoadFromMemory(OnlyBeatenGames, SelectedYear, SelectedPlatform.PlatformKey);
+                PlayedGameList = PlayedGameList.LoadFromMemory(OnlyBeatenGames, SelectedYear, SelectedPlatform.PlatformKey, PlayedOnIsChecked);
             else
                 PlayedGameList = PlayedGameList.LoadGame(userKey, true, -1, " ORDER BY DateAdded DESC", OnlyBeatenGames, SelectedYear, SelectedPlatform.PlatformKey);
 
@@ -229,11 +237,19 @@ namespace DesktopUI.TabVMs
             for (int i = 0; i < games.Count; i++)
             {
                 var game = games[i];
-                if (!platforms.Contains(game.PlatformPlayedOn))
+                //if (!platforms.Contains(game.PlatformPlayedOn))
+                //{
+                //    platforms.Add(game.PlatformPlayedOn);
+                //}
+                if (!platforms.Contains(game.MatchingMedia.Platform))
                 {
-                    platforms.Add(game.PlatformPlayedOn);
+                    platforms.Add(game.MatchingMedia.Platform);
                 }
             }
+
+
+
+
 
             // loop platforms and get stats
             var stats = new List<Stat>();
@@ -242,7 +258,8 @@ namespace DesktopUI.TabVMs
                 var plat = platforms[k];
                 var newStat = new Stat();
                 newStat.Name = LoadedData.PlatformList.FirstOrDefault(x => x.PlatformKey == plat)?.Name;
-                int count = games.Count(x => x.PlatformPlayedOn == plat);
+                //int count = games.Count(x => x.PlatformPlayedOn == plat);
+                int count = games.Count(x => x.MatchingMedia.Platform == plat);
                 newStat.Value = count.ToString();
                 decimal percentage = (decimal)(count / (decimal)games.Count) * 100;
                 newStat.Value2 = percentage.ToString("n1") + "%";

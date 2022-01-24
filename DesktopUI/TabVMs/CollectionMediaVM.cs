@@ -180,6 +180,8 @@ namespace DesktopUI.TabVMs
 
             var allCollection = MyCollection.ToList();
 
+            var test = allCollection.FirstOrDefault(x => x.CollectionKey == 44);
+
             if (SelectedPlatform.PlatformKey != 0)
               allCollection = MyCollection.Where(x=>x.MatchingMedia.Platform == SelectedPlatform.PlatformKey).ToList();
 

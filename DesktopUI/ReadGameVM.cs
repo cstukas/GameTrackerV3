@@ -98,6 +98,11 @@ namespace DesktopUI
             for (int i = 0; i < allAlike.Count; i++)
             {
                 var aGame = allAlike[i];
+
+                // dont include rom hacks
+                if (aGame.RemakeType == 5)
+                    continue;
+
                 if (aGame.GameKey != OgGame.GameKey)
                 {
                     string remakeType = "";

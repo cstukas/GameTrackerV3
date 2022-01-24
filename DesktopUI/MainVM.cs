@@ -275,6 +275,7 @@ namespace DesktopUI
             Stats.CollectionCount = collection.Count;
             Stats.CollectionBeatenCount = beaten.Count;
             var allBeaten = PlayedGameList.LoadYourPlayed(CurrentUser.UserKey);
+
             Stats.TotalBeatenCount = allBeaten.Count;
 
             string percent = Utilities.General.CalculatePercentString(Stats.CollectionBeatenCount, Stats.CollectionCount, 4);
@@ -323,6 +324,8 @@ namespace DesktopUI
 
             uniqueCollection = uniqueCollection.GroupBy(x => x.MatchingMedia.Name).Select(g => g.First()).ToList();
 
+
+
             //Unique Beat
             var uniqueBeat = new List<CollectionGame>();
             for (int fc = 0; fc < beaten.Count; fc++)
@@ -343,6 +346,8 @@ namespace DesktopUI
             }
 
             uniqueBeat = uniqueBeat.GroupBy(x => x.MatchingMedia.Name).Select(g => g.First()).ToList();
+
+
 
 
             Stats.UniqueCollectionCount = uniqueCollection.Count;

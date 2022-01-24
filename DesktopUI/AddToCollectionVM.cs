@@ -497,8 +497,8 @@ namespace DesktopUI
             // Refresh Collection Tab
             if (ownGame != null)
             {
-                Globals.RefreshCollection = true;
-                Stats.UpdateStats = true;
+     //           Globals.RefreshCollection = true;
+     //           Stats.UpdateStats = true;
             }
 
 

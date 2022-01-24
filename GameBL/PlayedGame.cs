@@ -146,6 +146,14 @@ namespace GameBL
             }
         }
 
+        public string RatingInfo2
+        {
+            get
+            {
+                return Utilities.General.GetRating(Rating);
+            }
+        }
+
         private string monthName;
         public string MonthName
         {
@@ -230,6 +238,68 @@ namespace GameBL
                 }
 
                 return $"{Platform.KeyToName(MatchingMedia.Platform)}{remakeType}";
+            }
+        }
+
+        public string PlatformInfo2
+        {
+            get
+            {
+                string remakeType = "";
+                if (MatchingMedia.RemakeType > 0)
+                {
+                    remakeType = " " + RemakeTypes.KeyToName(MatchingMedia.RemakeType);
+                }
+
+                var str = $"{Platform.KeyToName(MatchingMedia.Platform)}{remakeType}";
+                if(MatchingMedia.Platform != PlatformPlayedOn)
+                {
+                    str += $" played on {Platform.KeyToName(PlatformPlayedOn)}";
+                }
+
+                return $"{str}";
+            }
+        }
+
+        public string GapInfo
+        {
+            get
+            {
+                return $"{Gap}";
+            }
+        }
+
+        public bool OgGapInfo
+        {
+            get
+            {
+                if(OgGap != Gap)
+                {
+                    return true;
+                }
+
+                return false;
+            }
+        }
+
+        public bool PlayedOn
+        {
+            get
+            {
+                if (MatchingMedia.Platform != PlatformPlayedOn)
+                {
+                    return true;
+                }
+
+                return false;
+            }
+        }
+
+        public string PlatformPlayedOnInfo
+        {
+            get
+            {
+                return $"{Platform.KeyToName(PlatformPlayedOn)}";
             }
         }
 

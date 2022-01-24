@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DesktopUI"
         mc:Ignorable="d"
-        Title="{Binding WindowTitle}" Height="525" Width="600" FontSize="14" FontFamily="Microsoft Sans Serif">
+        Title="{Binding WindowTitle}" Height="525" Width="570" FontSize="14" FontFamily="Microsoft Sans Serif">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -66,7 +66,8 @@
 
         <Border Grid.Row="2" BorderBrush="Black" BorderThickness="1"/>
 
-        <ListBox Name="playedGamesList" ItemsSource="{Binding PlayedGames}" Grid.Row="3" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+        <ListBox Name="playedGamesList" ItemsSource="{Binding PlayedGames}" Grid.Row="3" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 ScrollViewer.CanContentScroll="False">
 
             <!-- Code that makes default selection dissapear -->
             <ListBox.ItemContainerStyle>
@@ -85,29 +86,83 @@
                 <DataTemplate>
                     <Grid Margin="4,4,4,8">
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="18"/>
+                            <RowDefinition Height="auto"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
 
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="60"/>
-                                <ColumnDefinition Width="90"/>
-                                <ColumnDefinition Width="140"/>
-                                <ColumnDefinition Width="175"/>
-                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition Width="auto"/>
+                                <!--<ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>-->
                             </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="18"/>
+                                <RowDefinition Height="3"/>
+                                <RowDefinition Height="18"/>
+                            </Grid.RowDefinitions>
 
-                            <TextBlock Text="{Binding UserKey, Converter={StaticResource UserKeyToNameConverter}}" Margin="0,0,0,0" FontWeight="Bold" HorizontalAlignment="Left" />
-                            <TextBlock Text="{Binding DateInfoReversed}" Grid.Column="1" Margin="5,0,0,0" FontWeight="Bold"  HorizontalAlignment="Left"/>
-                            <TextBlock Text="{Binding PlatformInfo}" Grid.Column="2" Margin="5,0,0,0" FontWeight="Bold"      HorizontalAlignment="Left"/>
-                            <TextBlock Text="{Binding PercentageInfo}" Grid.Column="3" Margin="5,0,0,0" FontWeight="Bold"    HorizontalAlignment="Left"/>
-                            <TextBlock Text="{Binding HourInfo}" Grid.Column="4" Margin="5,0,0,0" FontWeight="Bold"          HorizontalAlignment="Left"/>
 
-                            <Border BorderBrush="LightGray" BorderThickness="0,0,1,0"/>
-                            <Border BorderBrush="LightGray" BorderThickness="0,0,1,0" Grid.Column="1"/>
-                            <Border BorderBrush="LightGray" BorderThickness="0,0,1,0" Grid.Column="2"/>
-                            <Border BorderBrush="LightGray" BorderThickness="0,0,1,0" Grid.Column="3"/>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding UserKey, Converter={StaticResource UserKeyToNameConverter}}" Margin="0,0,0,0" FontWeight="Bold" HorizontalAlignment="Left" Width="79"/>
+                                <Border BorderBrush="LightGray" BorderThickness="0,0,1,0"/>
+                                <TextBlock Text="{Binding DateInfoReversed}" Margin="5,0,0,0" FontWeight="Bold"  HorizontalAlignment="Left" Width="90"/>
+                                <Border BorderBrush="LightGray" BorderThickness="0,0,1,0" />
+                                <!--<TextBlock Text="{Binding PlatformInfo2}" Grid.Column="1" Margin="5,0,0,0" FontWeight="Bold"  HorizontalAlignment="Left" Width="220"/>-->
+
+                                <StackPanel Grid.Column="2" Margin="5,0,0,0" HorizontalAlignment="Left" Width="252" Orientation="Horizontal">
+                                    <TextBlock Text="{Binding PlatformInfo}"  FontWeight="Bold"      />
+                                    <TextBlock Text=" played on  " FontWeight="Bold" FontStyle="Italic" FontSize="13" Margin="0,-2,0,0" VerticalAlignment="Center" 
+                                               Visibility="{Binding PlayedOn, Converter={StaticResource BoolToVisConverter}, ConverterParameter=visible|hidden}"/>
+                                    <TextBlock Text="{Binding PlatformPlayedOnInfo}"  FontWeight="Bold" 
+                                               Visibility="{Binding PlayedOn, Converter={StaticResource BoolToVisConverter}, ConverterParameter=visible|hidden}"/>
+                                </StackPanel>
+
+
+                                <Border BorderBrush="LightGray" BorderThickness="0,0,1,0"/>
+                                
+                                
+
+                                <StackPanel Margin="5,0,0,0" HorizontalAlignment="Left" Orientation="Horizontal" >
+                                    <TextBlock Text="{Binding GapInfo}"  FontWeight="Bold"      />
+                                    <TextBlock Text=" year gap" FontStyle="Italic" FontWeight="Bold" FontSize="13" Margin="0,-2,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+
+                                
+                                <!--<TextBlock Text="{Binding PercentageInfo}" Grid.Column="3" Margin="5,0,0,0" FontWeight="Bold"    HorizontalAlignment="Left" Width="175"/>
+                                <Border BorderBrush="LightGray" BorderThickness="0,0,1,0" Grid.Column="3" Margin="0,1,0,1"/>
+                                <TextBlock Text="{Binding HourInfo}" Grid.Column="4" Margin="5,0,0,0" FontWeight="Bold"          HorizontalAlignment="Left" Width="100"/>-->
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" Grid.Row="2">
+                                <TextBlock Text="{Binding PercentageInfo}" Margin="0,0,0,0" FontWeight="Bold" HorizontalAlignment="Left" Width="175" Grid.Row="1"/>
+                                <Border BorderBrush="LightGray" BorderThickness="0,0,1,0" Grid.Row="1"/>
+
+                                <TextBlock Text="{Binding RatingInfo2}" Margin="5,0,0,0" FontWeight="Bold"  HorizontalAlignment="Left" Width="151" />
+
+                                <Border BorderBrush="LightGray" BorderThickness="0,0,1,0" Grid.Column="1" Grid.Row="1"/>
+                                <!--<TextBlock Text="{Binding GapInfo}" Grid.Column="2" Margin="5,0,0,0" FontWeight="Bold"      HorizontalAlignment="Left" Width="95" Grid.Row="1"/>
+                                <TextBlock Text="{Binding OgGapInfo}" Grid.Column="3" Margin="5,0,0,0" FontWeight="Bold"    HorizontalAlignment="Left" Width="140" Grid.Row="1"/>-->
+                                <TextBlock Text="{Binding HourInfo}" Grid.Column="1" Margin="5,0,0,0" FontWeight="Bold"  HorizontalAlignment="Left" Width="95" Grid.Row="1"/>
+
+
+                                <Border BorderBrush="LightGray" BorderThickness="0,0,1,0" Grid.Column="2" Grid.Row="1" />
+
+                                <StackPanel Margin="5,0,0,0" HorizontalAlignment="Left" Width="120" Orientation="Horizontal"
+                                            Visibility="{Binding OgGapInfo, Converter={StaticResource BoolToVisConverter}, ConverterParameter=visible|hidden}">
+                                    <TextBlock Text="{Binding OgGap}"  FontWeight="Bold"      />
+                                    <TextBlock Text=" year gap" FontStyle="Italic" FontWeight="Bold" FontSize="13" Margin="0,-2,0,0" VerticalAlignment="Center" />
+                                </StackPanel>
+
+                                <Border BorderBrush="LightGray" BorderThickness="0,0,1,0" Grid.Column="2" Grid.Row="1" Margin="0,5,0,0" />
+
+
+
+                            </StackPanel>
+
+
 
 
                         </Grid>
@@ -120,12 +175,17 @@
                             <TextBlock Text=" - " Margin="0,0,0,0"  FontWeight="Bold" Visibility="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.OnlyShowMine, Converter={StaticResource BoolToVisConverter}, ConverterParameter=collapsed|visible}"/>
                             <TextBlock Text="{Binding InfoString}" FontWeight="Bold"/>
                         </StackPanel>-->
-                        <TextBlock Text="{Binding Memo}" Margin="0,2,0,0" Grid.Row="2" TextWrapping="Wrap"
+
+
+
+                        <TextBlock Text="{Binding Memo}" Margin="0,3,0,0" Grid.Row="2" TextWrapping="Wrap"
                                    FontSize="14"/>
 
                         <TextBlock Visibility="{Binding Memo, Converter={StaticResource NoMemoVisConverter}}" 
                                    Text="No memo" Margin="0,2,0,0" Grid.Row="2" FontSize="14" FontStyle="Italic"/>
 
+
+                        <Border BorderBrush="LightGray" Grid.Row="3" BorderThickness="0,0,0,1" Margin="0,0,0,-8"/>
 
                     </Grid>
 

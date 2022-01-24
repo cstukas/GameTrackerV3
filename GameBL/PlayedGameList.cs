@@ -111,7 +111,7 @@ namespace GameBL
             return fmList;
         }
 
-        public static PlayedGameList LoadFromMemory(bool onlyBeaten, string year, int platformKey)
+        public static PlayedGameList LoadFromMemory(bool onlyBeaten, string year, int platformKey, bool playedOnIsChecked)
         {
             var list = new List<PlayedGame>();
             var pmList = new PlayedGameList();
@@ -129,7 +129,14 @@ namespace GameBL
 
 
                 if (platformKey > 0)
-                    list = list.Where(x => x.PlatformPlayedOn == platformKey).ToList();
+                {
+                    if(playedOnIsChecked)
+                        list = list.Where(x => x.PlatformPlayedOn == platformKey).ToList();
+                    else
+                        list = list.Where(x => x.MatchingMedia.Platform == platformKey).ToList();
+
+
+                }
             }
 
             for (int i = 0; i < list.Count; i++)
