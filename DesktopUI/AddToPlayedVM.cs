@@ -134,7 +134,7 @@ namespace DesktopUI
             GameList = LoadedData.AllGames;
             PercentageList = LoadedData.PercentageList;
             PlatformList = Utilities.General.CloneList(LoadedData.PlatformList);
-            PlatformList.Insert(0, new Platform(0, "<Same as above>"));
+            PlatformList.Insert(0, new Platform(0, "<Same as above>", 0));
 
             // A NEW ENTRY
             if (playedGame == null) 

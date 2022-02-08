@@ -643,8 +643,7 @@
                     <StackPanel Width="250 " Margin="15" Grid.Column="0" Grid.Row="1" >
                         <TextBlock Text="Friends" Margin="0,0,0,10" HorizontalAlignment="Center" FontWeight="Bold" FontSize="16"/>
                         <DataGrid ItemsSource="{Binding AllFriends}" SelectedItem="{Binding SelectedUser}" 
-                              IsReadOnly="True" AutoGenerateColumns="False"  Height="300" HorizontalScrollBarVisibility="Hidden"
-                              >
+                              IsReadOnly="True" AutoGenerateColumns="False"  Height="300" HorizontalScrollBarVisibility="Hidden" >
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Key" Width="50" Binding="{Binding UserKey}" />
                                 <DataGridTextColumn Header="Name" Width="195" Binding="{Binding UserName}" />
@@ -680,7 +679,38 @@
 
                 </Grid>
             </TabItem>
+            <TabItem Header="Platforms" Width="90"  DataContext="{Binding PlatformsVM}" >
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="auto"/>
 
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Text="Platforms" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,5,0,0"/>
+                    <DataGrid ItemsSource="{Binding PlatformList}"  Grid.Row="1" IsReadOnly="True" AutoGenerateColumns="False" Margin="10,5,5,5">
+                        <DataGrid.InputBindings>
+                            <MouseBinding Gesture="LeftDoubleClick" Command="{Binding FriendClickedCommand}" />
+                        </DataGrid.InputBindings>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Name" Width="120" Binding="{Binding Name}" />
+                            <DataGridTextColumn Header="Year" Width="60" Binding="{Binding YearReleased}" />
+                        </DataGrid.Columns>
+
+                    </DataGrid>
+                    <StackPanel Grid.Row="2" Margin="5">
+                        <Button Content="Add Platform" Margin="5,0,0,0" Height="24" Command="{Binding AddNewCommand}"/>
+                    </StackPanel>
+                    
+                </Grid>
+            </TabItem>
+            
             <TabItem Header="Stats" Width="90"  DataContext="{Binding StatsVM}">
                 <Grid>
                     <Grid.ColumnDefinitions>
