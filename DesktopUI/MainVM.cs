@@ -61,6 +61,7 @@ namespace DesktopUI
         public ToPlayVM ToPlayVM { get; set; }
         public SeriesVM SeriesVM { get; set; }
         public ToBuyVm ToBuyVM { get; set; }
+        public PlatformsVM PlatformsVM { get; set; }
         public StatsVM StatsVM { get; set; }
 
 
@@ -243,6 +244,7 @@ namespace DesktopUI
             ToPlayVM = new ToPlayVM(this);
             ToBuyVM = new ToBuyVm(this);
             SeriesVM = new SeriesVM(this);
+            PlatformsVM = new PlatformsVM(this);
             StatsVM = loadedStats;
             StatsVM.ParentVM = this;
 
@@ -666,6 +668,7 @@ namespace DesktopUI
         // View Media
         public void ViewMedia(Game game)
         {
+            if (game == null) return;
             if (game.GameKey == 0) return;
 
             Mouse.OverrideCursor = Cursors.Wait;

@@ -248,6 +248,10 @@
     <Compile Include="HelperUI\AddGenreWindow.xaml.cs">
       <DependentUpon>AddGenreWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="HelperUI\AddPlatformVM.cs" />
+    <Compile Include="HelperUI\AddPlatformWIndow.xaml.cs">
+      <DependentUpon>AddPlatformWIndow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ReadGameVM.cs" />
     <Compile Include="ReadGameWindow.xaml.cs">
       <DependentUpon>ReadGameWindow.xaml</DependentUpon>
@@ -264,6 +268,7 @@
     <Compile Include="TabVMs\SeriesVM.cs" />
     <Compile Include="TabVMs\StatsVM.cs" />
     <Compile Include="TabVMs\ToBuyVM.cs" />
+    <Compile Include="TabVMs\PlatformsVM.cs" />
     <Compile Include="TabVMs\ToPlayVM.cs" />
     <Page Include="AddToCollectionWindow.xaml">
       <SubType>Designer</SubType>
@@ -286,6 +291,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="HelperUI\AddGenreWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="HelperUI\AddPlatformWIndow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
