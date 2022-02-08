@@ -452,7 +452,6 @@
 
                     <Button Content="Manage Series" Margin="5" Width="120" HorizontalAlignment="Right" Grid.Column="0" Grid.ColumnSpan="2" />
 
-
                     <DataGrid ItemsSource="{Binding SeriesGames}" SelectedItem="{Binding SelectedSeriesGame}" Grid.Row="1" VerticalContentAlignment="Center" IsReadOnly="True" AutoGenerateColumns="False" SelectionMode="Single"  Grid.ColumnSpan="1">
                         <DataGrid.InputBindings>
                             <MouseBinding Gesture="LeftDoubleClick" Command="{Binding GameClickedCommand}"/>

@@ -87,7 +87,6 @@ namespace GameBL
                     var cm = ordered[o];
 
                     var beatenCount = 0;
-                    bool finished = false;
 
 
                     // Find OG Game
@@ -105,14 +104,19 @@ namespace GameBL
 
                     // todo change this from collection to ALL games
                     //        var allAlikeGames = collection.Where(x => x.MatchingMedia?.RemakeOf == ogGame.GameKey || x.MatchingMedia?.Name.ToLower() == ogGame.MatchingMedia.Name.ToLower()).ToList();
-                    var allAlikeGames = LoadedData.AllGames.Where(x => x.RemakeOf == ogGame.GameKey || x.Name.ToLower() == ogGame.MatchingMedia.Name.ToLower()).ToList();
+                    var allAlikeGames = LoadedData.AllGames.Where(x => x.RemakeOf == ogGame.GameKey || x.GameKey == ogGame.MatchingMedia.RemakeOf || x.Name.ToLower() == ogGame.MatchingMedia.Name.ToLower()).ToList();
 
                     if (allAlikeGames.Where(x=>x.GameKey == ogGame.GameKey).ToList().Count == 0)
                         allAlikeGames.Add(ogGame.MatchingMedia);
 
+
+                    bool finished = false;
+
                     for (int ag = 0; ag < allAlikeGames.Count; ag++)
                     {
                         var game = allAlikeGames[ag];
+
+
 
                         // Get all Played/Beated for this game
                         var playedGames = pgDtos.Where(x => x.GameKey == game.GameKey).ToList();
