@@ -18,10 +18,10 @@ namespace DataAccess
         // ----- Connection Functions -----
         public static string GetConnection()
         {
-            string hostname = "gametrackerv3.c1kkbgdsztd4.us-east-2.rds.amazonaws.com,1433";
+            string hostname = "gametrackerv3.chqjomcmy9q4.us-east-2.rds.amazonaws.com,1433";
             string dbname = "GameTrackerV3";
             string username = "admin";
-            string password = "pudding11";
+            string password = "buggagram11";
             return "Data Source=" + hostname + ";Initial Catalog=" + dbname + ";User ID=" + username + ";Password=" + password + ";";
         }
 
