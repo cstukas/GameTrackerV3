@@ -109,13 +109,19 @@ namespace DesktopUI.TabVMs
             {
                 var game = games[i];
 
-                var stat = new StatGame();
-                stat.GameKey = game.GameKey;
-                stat.Name = game.MatchingMedia.Name;
-                stat.Year = game.DateAdded.Year;
-                stat.Platform = game.PlatformInfo;
+                var finished = LoadedData.PercentageList.FirstOrDefault(x => x.ItemKey == game.PercentCompleted)?.Finished;
 
-                OnThisDayGames.Add(stat);
+                if(finished == 1)
+                {
+                    var stat = new StatGame();
+                    stat.GameKey = game.GameKey;
+                    stat.Name = game.MatchingMedia.Name;
+                    stat.Year = game.DateAdded.Year;
+                    stat.Platform = game.PlatformInfo;
+
+                    OnThisDayGames.Add(stat);
+                }
+
             }
 
 
