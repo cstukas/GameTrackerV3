@@ -110,7 +110,6 @@ namespace DesktopUI.TabVMs
                 var game = games[i];
 
                 var finished = LoadedData.PercentageList.FirstOrDefault(x => x.ItemKey == game.PercentCompleted)?.Finished;
-
                 if(finished == 1)
                 {
                     var stat = new StatGame();
