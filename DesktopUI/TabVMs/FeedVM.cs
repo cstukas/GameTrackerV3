@@ -38,9 +38,6 @@ namespace DesktopUI.TabVMs
             set { latestDateAdded = value; OnPropertyChanged("LatestDateAdded"); }
         }
 
-
-
-
         public FeedVM(MainVM parentVM)
         {
             synchronizationContext = SynchronizationContext.Current;
