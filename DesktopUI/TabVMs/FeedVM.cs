@@ -57,6 +57,7 @@ namespace DesktopUI.TabVMs
             var timer = new System.Timers.Timer(60000);
             timer.Elapsed += timer_Elapsed;
             timer.Start();
+
         }
 
         void timer_Elapsed(object sender, ElapsedEventArgs e)
