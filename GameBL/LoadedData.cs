@@ -17,6 +17,7 @@ namespace GameBL
         public static List<Percentages> PercentageList { get; set; }
         public static List<Platform> PlatformList { get; set; }
         public static List<Platform> PlatformListWithAll { get; set; }
+        public static List<TopGame> TopGames { get; set; }
         public static RemakeTypes RemakeTypeList { get; set; }
         public static Series SeriesList { get; set; }
         public static SeriesTypeList SeriesTypeList { get; set; }
@@ -46,6 +47,8 @@ namespace GameBL
 
             MyCollection = new CollectionGameList();
             MyCollection.LoadCollection(userKey);
+
+            TopGames = DataAccess.DBFunctions.LoadList<TopGame>("SELECT * FROM TopRatedGames ORDER BY OrderNumber");
         }
 
 
@@ -60,6 +63,25 @@ namespace GameBL
             AllGames.Add(game);
             AllGames = AllGames.OrderBy(x => x.Name).ToList();
         }
+
+
+
+
+
+    }
+
+
+    public class TopGame
+    {
+        public int GameKey { get; set; }
+        public int Rating { get; set; }
+        public int OrderNumber { get; set; }
+        public int Year { get; set; }
+
+
+        public string Name { get; set; }
+        public int Platform { get; set; }
+        public bool Finished { get; set; }
 
 
 

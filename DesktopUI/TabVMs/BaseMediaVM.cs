@@ -30,6 +30,14 @@ namespace DesktopUI.TabVMs
             set { selectedCollectionMedia = value; OnPropertyChanged("SelectedCollectionMedia"); }
         }
 
+
+        private TopGame selectedTopGame;
+        public TopGame SelectedTopGame
+        {
+            get { return selectedTopGame; }
+            set { selectedTopGame = value; OnPropertyChanged("SelectedTopGame"); }
+        }
+
         public void Init()
         {
             this.MediaClickedCommand = new DelegateCommand<object>(this.OnMediaClicked);

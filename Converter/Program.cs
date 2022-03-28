@@ -137,8 +137,7 @@ namespace Converter
                     var keys = DataAccess.DBFunctions.LoadList<int>($"SELECT GameKey FROM Game WHERE Name = '{newLine}'");
                     if (keys.Count > 0)
                         Key = keys[0];
-                    else
-                        Key = DataAccess.DBFunctions.GetNextKey(1, "GameKey");
+
 
                     gameName = newLine;
                 }
@@ -174,11 +173,15 @@ namespace Converter
                         else
                             str += " - NEW GAME";
 
+                        Console.WriteLine(str);
+
+                        var keeeey = Key;
                         if (Key <= 0)
                         {
                             var newGame = new GameBL.Game();
                             newGame.Name = gameName;
-                            newGame.GameKey = Key;
+                            newGame.GameKey = DataAccess.DBFunctions.GetNextKey(1, "GameKey");
+                            keeeey = newGame.GameKey;
                             newGame.Platform = PlatformKey;
                             newGame.YearReleased = Year;
                             newGame.DateAdded = DateTime.Now;
@@ -191,7 +194,7 @@ namespace Converter
 
                         }
 
-                        Insert(Key, Order, Rating);
+                        Insert(keeeey, Order, Rating);
 
 
                     }

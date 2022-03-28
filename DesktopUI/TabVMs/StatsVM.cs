@@ -21,12 +21,14 @@ namespace DesktopUI.TabVMs
 
     }
 
+
     public class StatsVM : BaseMediaVM
     {
         //******************************************
         // Commands
         //******************************************
         public ICommand GameClickedCommand { get; private set; }
+        public ICommand TopGameClickedCommand { get; private set; }
         public ICommand OnThisDayGameClickedCommand { get; private set; }
 
 
@@ -37,6 +39,7 @@ namespace DesktopUI.TabVMs
 
         public StatGame SelectedMostPlayed { get; set; }
         public List<StatGame> MostPlayedGames { get; set; }
+        public ObservableCollection<TopGame> TopGames { get; set; }
 
         public StatGame SelectedOnThisDay { get; set; }
         public ObservableCollection<StatGame> OnThisDayGames { get; set; }
@@ -61,6 +64,7 @@ namespace DesktopUI.TabVMs
             : base()
         {
             this.GameClickedCommand = new DelegateCommand<object>(this.OnGameClicked);
+            this.TopGameClickedCommand = new DelegateCommand<object>(this.OnTopGameClicked);
             this.OnThisDayGameClickedCommand = new DelegateCommand<object>(this.OnOnThisDayGameClicked);
 
             MostPlayedGames = new List<StatGame>();
@@ -74,7 +78,7 @@ namespace DesktopUI.TabVMs
         public void Load()
         {
             LoadMostPlayedGames();
-          //  LoadOnThisDayGames();
+            LoadTopGames();
         }
 
         //******************************************
@@ -90,6 +94,16 @@ namespace DesktopUI.TabVMs
             }
         }
 
+        private void OnTopGameClicked(object obj)
+        {
+            if (SelectedTopGame != null)
+            {
+                var game = LoadedData.AllGames.FirstOrDefault(x => x.GameKey == SelectedTopGame.GameKey);
+                if (game != null)
+                    ParentVM.ViewMedia(game);
+            }
+        }
+
         private void OnOnThisDayGameClicked(object obj)
         {
             if (SelectedOnThisDay != null)
@@ -98,6 +112,36 @@ namespace DesktopUI.TabVMs
                 if (game != null)
                     ParentVM.ViewMedia(game);
             }
+        }
+
+        public void LoadTopGames()
+        {
+            TopGames = new ObservableCollection<TopGame>();
+
+            for (int i = 0; i < LoadedData.TopGames.Count; i++)
+            {
+                var g = LoadedData.TopGames[i];
+
+                var game = LoadedData.AllGames.FirstOrDefault(x => x.GameKey == g.GameKey);
+                if(game != null)
+                {
+                    g.Name = game.Name;
+                }
+                else
+                {
+                    game = Game.LoadGame(g.GameKey);
+                    g.Name = game?.Name;
+
+                }
+
+                g.Platform = game.Platform;
+
+
+                TopGames.Add(g);
+            }
+
+            OnPropertyChanged("TopGames");
+
         }
 
         public void LoadOnThisDayGames()
