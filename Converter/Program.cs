@@ -49,70 +49,182 @@ namespace Converter
 
         static void Main(string[] args)
         {
-            var file = @"C:\Users\craigs\Documents\Personal\TopGames.txt";
+            var file = @"C:\Users\craig\Documents\TopGames.txt";
 
-            
+            int Key = -1;
+            int Order = -1;
+            int Rating = -1;
+            int Year = -1;
+            string gameName = "";
+            int PlatformKey = -1;
+
+            int counter = 0;
+            int count2 = 0;
+
+            bool valid = true;
+            foreach (string line in System.IO.File.ReadLines(file))
+            {
+                if (string.IsNullOrWhiteSpace(line)) continue;
+
+                // Rating
+                if(counter == 0)
+                {
+                    bool res;
+                    res = int.TryParse(line, out Rating);
+                }
+
+                // Order Num
+                if (counter == 1)
+                {
+                    var newLine = line.Replace(".","");
+
+                    bool res;
+                    res = int.TryParse(newLine, out Order);
+                }
+
+                // Name
+                if (counter == 2)
+                {
+                    string newLine = line;
+                    if (line.StartsWith("The Legend of Zelda"))
+                    {
+                        newLine = line.Substring(4);
+                    }
+
+                    newLine = newLine.Replace("'", "");
+                    if (newLine == "Grand Theft Auto IV")
+                        newLine = "Grand Theft Auto 4";
+
+                    if (newLine == "Grand Theft Auto V")
+                        newLine = "Grand Theft Auto 5";
+
+                    if (newLine == "Grand Theft Auto III")
+                        newLine = "Grand Theft Auto 3";
+
+                    if (newLine == "Metal Gear Solid 3: Subsistence")
+                        newLine = "Metal Gear Solid 3: Snake Eater";
+                    
+                    if (newLine == "Street Fighter IV")
+                        newLine = "Street Fighter 4";
+
+
+                    newLine = newLine.Replace("Tom Clancys ", "");
+                    newLine = newLine.Replace("Bros.", "Bros");
+                    newLine = newLine.Replace("Half-Life", "Half Life");
+                    newLine = newLine.Replace("Part II", "Part 2");
+
+                    newLine = newLine.Replace("Hawks", "Hawk");
+
+                    if (newLine == "The Elder Scrolls V: Skyrim")
+                        newLine = "The Elder Scrolls 5: Skyrim";
+
+                    if (newLine == "The Elder Scrolls IV: Oblivion")
+                        newLine = "The Elder Scrolls 4: Oblivion";
+
+                    if (newLine == "Mario Kart Super Circuit")
+                        newLine = "Mario Kart: Super Circuit";
+
+                    if (newLine == "Legend of Zelda: A Link to the Past")
+                        newLine = "Legend of Zelda: Link to the Past";
+
+                    if (newLine == "The Orange Box") valid = false;
+                    if (newLine == "Grand Theft Auto Double Pack") valid = false;
+                    if (newLine == "Legend of Zelda Collectors Edition") valid = false;
+                    if (newLine == "The Last of Us Remastered") valid = false;
+                    if (newLine == "Legend of Zelda: Ocarina of Time 3D") valid = false;
+
+                    newLine.Trim();
+                    var keys = DataAccess.DBFunctions.LoadList<int>($"SELECT GameKey FROM Game WHERE Name = '{newLine}'");
+                    if (keys.Count > 0)
+                        Key = keys[0];
+                    else
+                        Key = DataAccess.DBFunctions.GetNextKey(1, "GameKey");
+
+                    gameName = newLine;
+                }
+
+                // Platform
+                if (counter == 3)
+                {
+                    var newLine = line.Split(':')[1].Trim();
+                    PlatformKey = DataAccess.DBFunctions.LoadObject<int>($"SELECT PlatformKey FROM Platforms WHERE Name = '{newLine}' OR FullName = '{newLine}'");
+                }
+
+                // Year
+                if (counter == 4)
+                {
+                    var newLine = line.Split(',')[1];
+                    var year = newLine.Replace("Expand", "").Trim();
+
+
+                    bool res;
+                    res = int.TryParse(year, out Year);
+                }
+
+                counter++;
+
+                if (counter >= 5)
+                {
+
+                    if(valid)
+                    {
+                        var str = $"#{Order} - Rating: {Rating} - Year: {Year} - Name: {gameName}";
+                        if (Key > 0)
+                            str += $" - GameKey: {Key}";
+                        else
+                            str += " - NEW GAME";
+
+                        if (Key <= 0)
+                        {
+                            var newGame = new GameBL.Game();
+                            newGame.Name = gameName;
+                            newGame.GameKey = Key;
+                            newGame.Platform = PlatformKey;
+                            newGame.YearReleased = Year;
+                            newGame.DateAdded = DateTime.Now;
+
+                            newGame.Insert();
+
+                        }
+                        else
+                        {
+
+                        }
+
+                        Insert(Key, Order, Rating);
+
+
+                    }
 
 
 
-            //DataAccess.DBFunctions.RunQuery("DELETE FROM Platforms");
 
-            //int key = 1;
-            //Insert(key, "3DS");
-            //key++;
-            //Insert(key, "DS");
-            //key++;
-            //Insert(key, "GameCube");
-            //key++;
-            //Insert(key, "GBA");
-            //key++;
-            //Insert(key, "GBC");
-            //key++;
-            //Insert(key, "Mobile");
-            //key++;
-            //Insert(key, "N64");
-            //key++;
-            //Insert(key, "NES");
-            //key++;
-            //Insert(key, "PC");
-            //key++;
-            //Insert(key, "Emulator");
-            //key++;
-            //Insert(key, "PS Vita");
-            //key++;
-            //Insert(key, "PS1");
-            //key++;
-            //Insert(key, "PS2"); 
-            //key++;
-            //Insert(key, "PS3"); 
-            //key++;
-            //Insert(key, "PS4"); 
-            //key++;
-            //Insert(key, "PSP"); 
-            //key++;
-            //Insert(key, "PSVR"); 
-            //key++;
-            //key++;
-            //Insert(key, "Sega"); 
-            //key++;
-            //Insert(key, "SNES"); 
-            //key++;
-            //Insert(key, "Switch"); 
-            //key++;
-            //Insert(key, "Wii"); 
-            //key++;
-            //Insert(key, "Wii U"); 
-            //key++;
-            //Insert(key, "Xbox 360"); 
-            //key++;
-            //Insert(key, "Xbox One"); 
-            //key++;
-            //Insert(key, "Xbox");
-            //key++;
-            //Insert(key, "PS5"); 
-            //key++;
-            //Insert(key, "Xbox Series X");
+                    Key = -1;
+                    Order = -1;
+                    Rating = -1;
+                    Year = -1;
+                    gameName = "";
+                    PlatformKey = -1;
 
+                    counter = 0;
+
+                    count2++;
+                    valid = true;
+
+                }
+
+                if(count2 >= 5)
+                {
+                   // Console.ReadKey();
+                    count2 = 0;
+                }
+
+            }
+
+
+            Console.WriteLine("DONE");
+            Console.ReadKey();
         }
+
     }
 }

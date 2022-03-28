@@ -120,7 +120,7 @@ namespace DataAccess
             {
                 using (IDbConnection db = new SqlConnection(GetConnection()))
                 {
-                    Logger.Log("Load List: " + sql, true);
+                    Logger.Log("Load List: " + sql, false);
                     list = db.Query<T>(sql).ToList();
                 }
             }

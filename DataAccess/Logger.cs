@@ -13,7 +13,6 @@ namespace DataAccess
         {
             string t = DateTime.Now.ToString("HH:mm:ss");
             string mess = string.Format("{0}\t{1}", t, message);
-            Console.WriteLine(mess);
             return;
 
             DateTime now = DateTime.Now;
