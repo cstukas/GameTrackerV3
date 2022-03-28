@@ -54,6 +54,10 @@
       <Project>{43436d52-a73f-40a7-a020-aa40ee5d2b8b}</Project>
       <Name>DataAccess</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GameBL\GameBL.csproj">
+      <Project>{4fa46149-261b-4723-874c-4f42b8e9d1bf}</Project>
+      <Name>GameBL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Utilities\Utilities.csproj">
       <Project>{6c3d4399-0be8-4c7d-b4ed-53845744cf8f}</Project>
       <Name>Utilities</Name>

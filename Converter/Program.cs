@@ -6,38 +6,55 @@ using System.Threading.Tasks;
 
 namespace Converter
 {
-    class Percentages
+    //class Percentages
+    //{
+    //    public int ItemKey { get; set; }
+    //    public string Name { get; set; }
+    //    public int Beat { get; set; }
+    //    public int Finished { get; set; }
+    //}
+
+    //class Platform
+    //{
+    //    public int PlatformKey { get; set; }
+    //    public string Name { get; set; }
+    //}
+
+    class TopGame
     {
-        public int ItemKey { get; set; }
-        public string Name { get; set; }
-        public int Beat { get; set; }
-        public int Finished { get; set; }
+        public int GameKey { get; set; }
+        public int OrderNumber { get; set; }
+        public int Rating { get; set; }
     }
-
-    class Platform
-    {
-        public int PlatformKey { get; set; }
-        public string Name { get; set; }
-
-
-
-    }
-
-
 
 
     class Program
     {
-        static void Insert(int key, string name)
+        //static void Insert(int key, string name)
+        //{
+        //    var p = new Platform();
+        //    p.PlatformKey = key;
+        //    p.Name = name;
+        //    DataAccess.DBFunctions.InsertObject(p, "Platforms");
+        //}
+
+        static void Insert(int key, int order, int rating)
         {
-            var p = new Platform();
-            p.PlatformKey = key;
-            p.Name = name;
-            DataAccess.DBFunctions.InsertObject(p, "Platforms");
+            var tg = new TopGame();
+            tg.GameKey = key;
+            tg.OrderNumber = order;
+            tg.Rating = rating;
+            DataAccess.DBFunctions.InsertObject(tg, "TopRatedGames");
         }
 
         static void Main(string[] args)
         {
+            var file = @"C:\Users\craigs\Documents\Personal\TopGames.txt";
+
+            
+
+
+
             //DataAccess.DBFunctions.RunQuery("DELETE FROM Platforms");
 
             //int key = 1;
