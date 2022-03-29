@@ -795,7 +795,20 @@
                         <TextBlock Text="taken in March 2022" FontWeight="Normal" HorizontalAlignment="Right" FontSize="8" FontStyle="Italic"/>
 
                     </StackPanel>
-                    
+
+
+                    <Grid Grid.Column="1" VerticalAlignment="Top" Grid.Row="0" Margin="5,8,0,0">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding FinishedGames}"/>
+                            <TextBlock Text="/"/>
+                            <TextBlock Text="{Binding TotalGames}"/>
+                            <TextBlock Text="     "/>
+                            <TextBlock Text="{Binding BeatenPercent}"/>
+                            <TextBlock Text="%"/>
+
+                        </StackPanel>
+
+                    </Grid>
                     <DataGrid ItemsSource="{Binding TopGames}" SelectedItem="{Binding SelectedTopGame}" Grid.Row="1" Grid.RowSpan="3" Margin="5,5,5,5" Grid.Column="1" IsReadOnly="True" AutoGenerateColumns="False">
                         <DataGrid.InputBindings>
                             <MouseBinding Gesture="LeftDoubleClick" Command="{Binding TopGameClickedCommand}"/>
@@ -810,6 +823,7 @@
                         </DataGrid.Columns>
                     </DataGrid>
 
+                    
                 </Grid>
             </TabItem>
         </TabControl>

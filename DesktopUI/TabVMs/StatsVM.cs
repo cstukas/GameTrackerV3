@@ -56,6 +56,26 @@ namespace DesktopUI.TabVMs
             }
         }
 
+        private decimal finishedGames;
+        public decimal FinishedGames
+        {
+            get { return finishedGames; }
+            set { finishedGames = value; OnPropertyChanged("FinishedGames"); }
+        }
+
+        private decimal totalGames;
+        public decimal TotalGames
+        {
+            get { return totalGames; }
+            set { totalGames = value; OnPropertyChanged("TotalGames"); }
+        }
+
+        private decimal beatenPercent;
+        public decimal BeatenPercent
+        {
+            get { return beatenPercent; }
+            set { beatenPercent = value; OnPropertyChanged("BeatenPercent"); }
+        }
 
         //******************************************
         // Constructor
@@ -123,7 +143,7 @@ namespace DesktopUI.TabVMs
                 var g = LoadedData.TopGames[i];
 
                 var game = LoadedData.AllGames.FirstOrDefault(x => x.GameKey == g.GameKey);
-                if(game != null)
+                if (game != null)
                 {
                     g.Name = game.Name;
                 }
@@ -134,10 +154,37 @@ namespace DesktopUI.TabVMs
 
                 }
 
-                g.Platform = game.Platform;
+                if (g.Name == "SSX")
+                {
 
+                }
+
+                var playedGames = LoadedData.MyPlayedGames.Where(x => x.GameKey == game.GameKey || x.GameKey == game.RemakeOf || x.MatchingMedia.Name == game.Name || x.MatchingMedia.RemakeOf == game.GameKey).ToList();
+                var finished = false;
+                for (int k = 0; k < playedGames.Count; k++)
+                {
+                    var pg = playedGames[k];
+                    if (pg.PercentCompleted == 1 || pg.PercentCompleted == 2 || pg.PercentCompleted == 3 || pg.PercentCompleted == 4
+                        || pg.PercentCompleted == 7 || pg.PercentCompleted == 9 || pg.PercentCompleted == 10)
+                    {
+                        finished = true;
+                    }
+                }
+
+                g.Platform = game.Platform;
+                g.Finished = finished;
 
                 TopGames.Add(g);
+            }
+
+            TotalGames = TopGames.Count;
+            FinishedGames = TopGames.Count(x => x.Finished);
+
+            if(TotalGames> 0)
+            {
+                decimal result = FinishedGames / TotalGames;
+                BeatenPercent = Math.Round((Decimal)result, 2) * 100;
+
             }
 
             OnPropertyChanged("TopGames");

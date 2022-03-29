@@ -284,7 +284,6 @@ namespace DesktopUI
 
             TotalGamesString = $"{Stats.CollectionBeatenCount} / {Stats.CollectionCount}   {percent}%";
 
-
             // unique played
             var uniqueBeaten = new List<PlayedGame>();
             for (int fc = 0; fc < allBeaten.Count; fc++)
