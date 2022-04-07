@@ -36,6 +36,10 @@
 
         <DataGrid ItemsSource="{Binding DisplayGameList}" SelectedItem="{Binding SelectedGame}" SelectionMode="Single" Margin="5,0,5,0"
                               IsReadOnly="True" Grid.Row="2" AutoGenerateColumns="False">
+            <DataGrid.InputBindings>
+                <MouseBinding Gesture="LeftDoubleClick" Command="{Binding MediaClickedCommand}"/>
+            </DataGrid.InputBindings>
+
             <DataGrid.Columns>
 
                 <DataGridTextColumn Header="Key" Width="40" Binding="{Binding GameKey}"/>

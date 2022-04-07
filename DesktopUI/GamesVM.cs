@@ -13,6 +13,8 @@ namespace DesktopUI
     public class GamesVM : TabVMs.BaseMediaVM
     {
         public ICommand EditGameCommand { get; private set; }
+        public ICommand MediaClickedCommand { get; private set; }
+
 
         private List<Game> gameList;
         public List<Game> GameList
@@ -60,6 +62,7 @@ namespace DesktopUI
         public GamesVM()
         {
             this.EditGameCommand = new DelegateCommand<object>(this.OnEditGame);
+            this.MediaClickedCommand = new DelegateCommand<object>(this.OnMediaClicked);
 
             GameList = Utilities.General.CloneList(LoadedData.AllGames);
             DisplayGameList = new ObservableCollection<Game>();
@@ -76,6 +79,22 @@ namespace DesktopUI
         {
             var geWindow = new EditGameWindow(SelectedGame);
             geWindow.ShowDialog();
+        }
+
+        private void OnMediaClicked(object obj)
+        {
+
+            var media = new Game();
+            if (SelectedGame != null)
+            {
+                Mouse.OverrideCursor = Cursors.Wait;
+                var nextWindow = new ReadGameWindow(null, SelectedGame);
+                nextWindow.Show();
+
+            }
+         
+
+
         }
     }
 }
