@@ -721,6 +721,7 @@
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="2*"/>
+                        <RowDefinition Height="auto"/>
                     </Grid.RowDefinitions>
 
                     <TextBlock Text="On This Day" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Column="0"/>
@@ -757,7 +758,7 @@
                     </DataGrid>
 
                     <TextBlock Text="Most Played Games" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Column="0" Grid.Row="3" Margin="0,5,0,0"/>
-                    <DataGrid ItemsSource="{Binding MostPlayedGames}" SelectedItem="{Binding SelectedMostPlayed}" Grid.Row="3" Grid.RowSpan="1" Margin="5,25,5,5" Grid.Column="0" IsReadOnly="True" AutoGenerateColumns="False">
+                    <DataGrid ItemsSource="{Binding MostPlayedGames}" SelectedItem="{Binding SelectedMostPlayed}" Grid.Row="3" Grid.RowSpan="2" Margin="5,25,5,5" Grid.Column="0" IsReadOnly="True" AutoGenerateColumns="False">
                         <DataGrid.InputBindings>
                             <MouseBinding Gesture="LeftDoubleClick" Command="{Binding GameClickedCommand}"/>
                         </DataGrid.InputBindings>
@@ -790,25 +791,22 @@
                     </DataGrid>
 
                     <TextBlock Text="Top Rated Games" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Column="1" Grid.Row="0" Margin="0,5,0,0"/>
-                    <StackPanel VerticalAlignment="Bottom" Grid.Column="1" Grid.Row="0" Margin="0,5,5,0">
-                        <TextBlock Text="From Metacritics ratings" FontWeight="Normal" HorizontalAlignment="Right" FontSize="8" FontStyle="Italic"/>
-                        <TextBlock Text="taken in March 2022" FontWeight="Normal" HorizontalAlignment="Right" FontSize="8" FontStyle="Italic"/>
-
-                    </StackPanel>
-
-
-                    <Grid Grid.Column="1" VerticalAlignment="Top" Grid.Row="0" Margin="5,8,0,0">
-                        <StackPanel Orientation="Horizontal">
+                    <Grid Grid.Column="1" Grid.Row="0" Margin="0,0,5,0" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+                        <StackPanel Orientation="Horizontal" >
                             <TextBlock Text="{Binding FinishedGames}"/>
                             <TextBlock Text="/"/>
                             <TextBlock Text="{Binding TotalGames}"/>
-                            <TextBlock Text="     "/>
-                            <TextBlock Text="{Binding BeatenPercent}"/>
+                            <TextBlock Text="   "/>
+                            <TextBlock Text="{Binding BeatenPercentString}"/>
                             <TextBlock Text="%"/>
 
                         </StackPanel>
-
                     </Grid>
+
+                    <ComboBox Grid.Column="1" Grid.Row="0" Width="90" HorizontalAlignment="Left" Margin="5,2,0,0" Height="23" VerticalAlignment="Bottom"
+                              ItemsSource="{Binding TopRatedGamesOptions}" SelectedItem="{Binding SelectedTopRatedGameOption}"/>
+                    
+
                     <DataGrid ItemsSource="{Binding TopGames}" SelectedItem="{Binding SelectedTopGame}" Grid.Row="1" Grid.RowSpan="3" Margin="5,5,5,5" Grid.Column="1" IsReadOnly="True" AutoGenerateColumns="False">
                         <DataGrid.InputBindings>
                             <MouseBinding Gesture="LeftDoubleClick" Command="{Binding TopGameClickedCommand}"/>
@@ -822,6 +820,10 @@
                             <!--<DataGridTextColumn Header="Platform" Width="Auto" Binding="{Binding Platform, Converter={StaticResource PlatformKeyToNameConverter}}"/>-->
                         </DataGrid.Columns>
                     </DataGrid>
+
+                    <StackPanel Grid.Column="1" VerticalAlignment="Top" Grid.Row="4" Margin="5,0,5,0">
+                        <TextBlock Text="From Metacritics ratings taken in April 2022" FontWeight="Normal" HorizontalAlignment="Right" FontSize="9" FontStyle="Italic"/>
+                    </StackPanel>
 
                     
                 </Grid>

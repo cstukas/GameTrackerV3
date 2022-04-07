@@ -77,6 +77,32 @@ namespace DesktopUI.TabVMs
             set { beatenPercent = value; OnPropertyChanged("BeatenPercent"); }
         }
 
+        private string beatenPercentString;
+        public string BeatenPercentString
+        {
+            get { return beatenPercentString; }
+            set { beatenPercentString = value; OnPropertyChanged("BeatenPercentString"); }
+        }
+
+
+
+        public List<string> TopRatedGamesOptions { get; set; }
+
+        private string selectedTopRatedGameOption;
+        public string SelectedTopRatedGameOption
+        {
+            get { return selectedTopRatedGameOption; }
+            set 
+            { 
+                selectedTopRatedGameOption = value; 
+                OnPropertyChanged("SelectedTopRatedGameOption");
+
+                LoadTopGames();
+
+            }
+        }
+
+
         //******************************************
         // Constructor
         //******************************************
@@ -93,12 +119,20 @@ namespace DesktopUI.TabVMs
             OnThisDayDate = DateTime.Now;
 
             Load();
+
+
+            TopRatedGamesOptions = new List<string>();
+            for (int i = 90; i < 100; i++)
+            {
+                TopRatedGamesOptions.Insert(0,$"{i}+");
+            }
+
+            SelectedTopRatedGameOption = TopRatedGamesOptions[5];
         }
         
         public void Load()
         {
             LoadMostPlayedGames();
-            LoadTopGames();
         }
 
         //******************************************
@@ -142,6 +176,11 @@ namespace DesktopUI.TabVMs
             {
                 var g = LoadedData.TopGames[i];
 
+                var sRating = SelectedTopRatedGameOption.Replace("+", "");
+                var selectedRating = Convert.ToInt32(sRating);
+
+                if (g.Rating < selectedRating) continue;
+
                 var game = LoadedData.AllGames.FirstOrDefault(x => x.GameKey == g.GameKey);
                 if (game != null)
                 {
@@ -151,11 +190,6 @@ namespace DesktopUI.TabVMs
                 {
                     game = Game.LoadGame(g.GameKey);
                     g.Name = game?.Name;
-
-                }
-
-                if (g.Name == "SSX")
-                {
 
                 }
 
@@ -184,6 +218,16 @@ namespace DesktopUI.TabVMs
             {
                 decimal result = FinishedGames / TotalGames;
                 BeatenPercent = Math.Round((Decimal)result, 2) * 100;
+
+
+
+
+                BeatenPercentString = BeatenPercent.ToString();
+                if(BeatenPercentString.Contains('.'))
+                {
+                    BeatenPercentString = BeatenPercentString.Split('.')[0];
+                }
+
 
             }
 
