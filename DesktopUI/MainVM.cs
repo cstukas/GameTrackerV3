@@ -748,7 +748,7 @@ namespace DesktopUI
                 SelectedTabIndex = (int)MenuTabs.PlayedGames; // Played Tab
 
                 PlayedVM.SelectedUser = Utilities.UserUtils.CurrentUser;
-                PlayedVM.OnlyBeatenGames = true;
+                //PlayedVM.OnlyBeatenGames = true;
                 PlayedVM.SelectedPlatform = PlayedVM.PlatformList[0];
                 PlayedVM.SelectedYear = stat.Name;
                 PlayedVM.RefreshData();
@@ -763,7 +763,7 @@ namespace DesktopUI
                 SelectedTabIndex = (int)MenuTabs.PlayedGames; // Played Tab
 
                 PlayedVM.SelectedUser = Utilities.UserUtils.CurrentUser;
-                PlayedVM.OnlyBeatenGames = true;
+                //PlayedVM.OnlyBeatenGames = true;
                 PlayedVM.SelectedPlatform = PlayedVM.PlatformList[0];
                 PlayedVM.SelectedYear = stat.Value;
                 PlayedVM.RefreshData();
