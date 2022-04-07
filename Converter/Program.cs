@@ -38,19 +38,24 @@ namespace Converter
         //    DataAccess.DBFunctions.InsertObject(p, "Platforms");
         //}
 
+        public static List<TopGame> GamesInserted { get; set; }
+
         static void Insert(int key, int order, int rating)
         {
             var tg = new TopGame();
             tg.GameKey = key;
             tg.OrderNumber = order;
             tg.Rating = rating;
+
+            GamesInserted.Add(tg);
+
             DataAccess.DBFunctions.InsertObject(tg, "TopRatedGames");
         }
 
         static void Main(string[] args)
         {
-            var file = @"C:\Users\craig\Documents\TopGames.txt";
-
+            var file = @"C:\Users\craigs\Documents\TopRatedGames.txt";
+            GamesInserted = new List<TopGame>();
             int Key = -1;
             int Order = -1;
             int Rating = -1;
@@ -124,6 +129,9 @@ namespace Converter
                     if (newLine == "Mario Kart Super Circuit")
                         newLine = "Mario Kart: Super Circuit";
 
+                    if (newLine == "Banjo-Kazooie")
+                        newLine = "Banjo Kazooie";
+
                     if (newLine == "Legend of Zelda: A Link to the Past")
                         newLine = "Legend of Zelda: Link to the Past";
 
@@ -173,20 +181,28 @@ namespace Converter
                         else
                             str += " - NEW GAME";
 
-                        Console.WriteLine(str);
 
                         var keeeey = Key;
                         if (Key <= 0)
                         {
-                            var newGame = new GameBL.Game();
-                            newGame.Name = gameName;
-                            newGame.GameKey = DataAccess.DBFunctions.GetNextKey(1, "GameKey");
-                            keeeey = newGame.GameKey;
-                            newGame.Platform = PlatformKey;
-                            newGame.YearReleased = Year;
-                            newGame.DateAdded = DateTime.Now;
+                            try
+                            {
+                                var newGame = new GameBL.Game();
+                                newGame.Name = gameName;
+                                newGame.GameKey = DataAccess.DBFunctions.GetNextKey(1, "GameKey");
+                                keeeey = newGame.GameKey;
+                                newGame.Platform = PlatformKey;
+                                newGame.YearReleased = Year;
+                                newGame.DateAdded = DateTime.Now;
 
-                            newGame.Insert();
+                                newGame.Insert();
+                            }
+                            catch (Exception e)
+                            {
+
+
+                            }
+
 
                         }
                         else
@@ -194,7 +210,21 @@ namespace Converter
 
                         }
 
-                        Insert(keeeey, Order, Rating);
+                        if(keeeey > 0)
+                        {
+                            var match = GamesInserted.FirstOrDefault(x => x.GameKey == Key);
+                            if (match == null)
+                            {
+                                Insert(keeeey, Order, Rating);
+                                Console.WriteLine(str);
+
+                            }
+                        }
+
+
+
+
+
 
 
                     }
