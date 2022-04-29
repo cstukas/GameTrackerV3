@@ -538,7 +538,7 @@
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="75"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="25"/>
@@ -549,9 +549,11 @@
                         <TextBlock Text="{Binding GameCount}" FontSize="16" VerticalAlignment="Center" Margin="5,0,0,0"/>
                     </StackPanel>
 
-                    <DataGrid ItemsSource="{Binding ToPlayGamesList}" IsReadOnly="True" AutoGenerateColumns="False" Grid.Row="1" SelectionMode="Single">
+                    <DataGrid ItemsSource="{Binding ToPlayGamesList}" SelectedItem="{Binding SelectedCollectionMedia}" IsReadOnly="True" AutoGenerateColumns="False" Grid.Row="1" SelectionMode="Single">
+                        <DataGrid.InputBindings>
+                            <MouseBinding Gesture="LeftDoubleClick" Command="{Binding MediaClickedCommand}"/>
+                        </DataGrid.InputBindings>
                         <DataGrid.Columns>
-
                             <DataGridTextColumn Header="Name" Width="300"  Binding="{Binding MatchingMedia.Name}" />
                             <DataGridTextColumn Header="Year" Width="70" Binding="{Binding MatchingMedia.YearReleased}" />
                             <DataGridTextColumn Header="Platform" Width="70" Binding="{Binding MatchingMedia.Platform, Converter={StaticResource PlatformKeyToNameConverter}}" />
@@ -568,17 +570,26 @@
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
 
-                            <DataGridTextColumn Header="Genre" Width="75" Binding="{Binding MatchingMedia.Genre2, Converter={StaticResource GenreKeyToNameConverter}}" />
+                            <!--<DataGridTextColumn Header="Genre" Width="75" Binding="{Binding MatchingMedia.Genre2, Converter={StaticResource GenreKeyToNameConverter}}" />
                             <DataGridTextColumn Header="RemakeType" Width="100" Binding="{Binding MatchingMedia.RemakeType}"/>
-                            <DataGridTextColumn Header="RemakeOf" Width="100" Binding="{Binding MatchingMedia.RemakeOf}"/>
+                            <DataGridTextColumn Header="RemakeOf" Width="100" Binding="{Binding MatchingMedia.RemakeOf}"/>-->
+                            
+                            <DataGridTextColumn Header="%" Width="100" Binding="{Binding PercentBeaten}"/>
 
 
                         </DataGrid.Columns>
+
+                        <DataGrid.RowStyle>
+                            <Style TargetType="DataGridRow">
+                                <Setter Property="Background" Value="{Binding PercentBeaten, Converter={StaticResource PercentBeatenToColorConverter}}"/>
+                            </Style>
+                        </DataGrid.RowStyle>
+                        
                     </DataGrid>
 
-                    <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="1" VerticalAlignment="Top" Margin="10" HorizontalAlignment="Center">
-                        <Button Content="Up" Width="50" Height="30" Margin="0,0,0,10"/>
-                        <Button Content="Down" Width="50" Height="30"  />
+                    <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="1" VerticalAlignment="Top" Margin="0,0,0,0" HorizontalAlignment="Center">
+                        <Button Content="Up" Width="60" Height="24" Margin="0,0,0,5" Command="{Binding ProgressCommand}" CommandParameter="up"/>
+                        <Button Content="Down" Width="60" Height="24"  Command="{Binding ProgressCommand}" CommandParameter="down"/>
                     </StackPanel>
 
                 </Grid>

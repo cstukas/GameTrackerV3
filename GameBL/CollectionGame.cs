@@ -217,5 +217,11 @@ namespace GameBL
 
 
         }
+
+        public void UpdatePercentBeaten()
+        {
+            var sql = $"UPDATE Collection SET PercentBeaten = {PercentBeaten} WHERE CollectionKey = {CollectionKey} AND UserKey = {UserKey}";
+            DataAccess.DBFunctions.RunQuery(sql);
+        }
     }
 }

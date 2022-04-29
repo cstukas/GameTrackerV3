@@ -127,7 +127,7 @@ namespace DesktopUI.TabVMs
                 TopRatedGamesOptions.Insert(0,$"{i}+");
             }
 
-            SelectedTopRatedGameOption = TopRatedGamesOptions[5];
+            SelectedTopRatedGameOption = TopRatedGamesOptions[3];
         }
         
         public void Load()

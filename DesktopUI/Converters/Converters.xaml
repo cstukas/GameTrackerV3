@@ -29,5 +29,6 @@
     <converters:GameKeyToNameConverter x:Key="GameKeyToNameConverter"/>
     <converters:RemakeTypeKeyToNameConverter x:Key="RemakeTypeKeyToNameConverter"/>
     <converters:DimensionTypeToNameConverter x:Key="DimensionTypeToNameConverter"/>
+    <converters:PercentBeatenToColorConverter x:Key="PercentBeatenToColorConverter"/>
 
 </ResourceDictionary>

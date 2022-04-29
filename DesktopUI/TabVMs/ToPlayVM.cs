@@ -16,6 +16,8 @@ namespace DesktopUI.TabVMs
         // Commands
         //******************************************
         public ICommand EditSelectedCommand { get; private set; }
+        public ICommand ProgressCommand { get; private set; }
+        //public ICommand MediaClickedCommand { get; private set; }
 
 
         //******************************************
@@ -35,6 +37,13 @@ namespace DesktopUI.TabVMs
             set { gameCount = value; OnPropertyChanged("GameCount"); }
         }
 
+        //private CollectionGame selectedGameToPlay;
+
+        //public CollectionGame SelectedGameToPlay
+        //{
+        //    get { return selectedGameToPlay; }
+        //    set { selectedGameToPlay = value; OnPropertyChanged("SelectedGameToPlay"); }
+        //}
 
 
 
@@ -45,6 +54,8 @@ namespace DesktopUI.TabVMs
             : base(parentVM)
         {
             this.EditSelectedCommand = new DelegateCommand<object>(this.OnEditSelected);
+            this.ProgressCommand = new DelegateCommand<object>(this.OnProgress);
+            //this.MediaClickedCommand = new DelegateCommand<object>(this.OnMediaClicked);
 
             ToPlayGamesList = new List<CollectionGame>();
         }
@@ -55,7 +66,7 @@ namespace DesktopUI.TabVMs
         //******************************************
         public void RefreshData(bool onlyFriends = false)
         {
-            var toPlay = LoadedData.MyCollection.Where(x => x.Finished == 0 && x.Playing == 1 && x.Own == 1).OrderBy(x => x.MatchingMedia.Name).ToList();
+            var toPlay = LoadedData.MyCollection.Where(x => x.Finished == 0 && x.Playing == 1 && x.Own == 1).OrderByDescending(x => x.PercentBeaten).ToList();
             ToPlayGamesList = Utilities.General.CloneList(toPlay);
             GameCount = ToPlayGamesList.Count;
         }
@@ -67,6 +78,41 @@ namespace DesktopUI.TabVMs
             //    ParentVM.OpenAddToPlayedWindow(SelectedPlayedGame);
             //}
         }
+        private void OnProgress(object obj)
+        {
+            if(SelectedCollectionMedia != null)
+            {
+                var para = obj.ToString();
+                if (para.ToLower() == "up")
+                {
+                    Console.WriteLine("up");
+
+                    if (SelectedCollectionMedia.PercentBeaten < 3)
+                    {
+                        SelectedCollectionMedia.PercentBeaten++;
+                        SelectedCollectionMedia.UpdatePercentBeaten();
+                    }
+
+
+                }
+                else if (para.ToLower() == "down")
+                {
+                    if (SelectedCollectionMedia.PercentBeaten > 0)
+                    {
+                        SelectedCollectionMedia.PercentBeaten--;
+                        SelectedCollectionMedia.UpdatePercentBeaten();
+
+                    }
+                }
+            }
+
+        }
+
+        //private void OnMediaClicked(object obj)
+        //{
+
+
+        //}
 
 
     }

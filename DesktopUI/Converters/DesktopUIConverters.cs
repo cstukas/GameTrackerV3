@@ -194,4 +194,26 @@ namespace DesktopUI.Converters
     }
 
 
+    class PercentBeatenToColorConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            
+               var val = (int)value;
+            if (val == 0) return System.Windows.Media.Brushes.White;
+            else if (val == 1) return System.Windows.Media.Brushes.LightGreen;
+            else if (val == 2) return System.Windows.Media.Brushes.MediumSeaGreen;
+            else if (val == 3) return System.Windows.Media.Brushes.Green;
+            else return System.Windows.Media.Brushes.White;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+
+
+
 }
