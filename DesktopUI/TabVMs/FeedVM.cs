@@ -45,7 +45,7 @@ namespace DesktopUI.TabVMs
             ParentVM = parentVM;
 
             FeedList = new PlayedGameList();
-            FeedList = PlayedGameList.LoadGame(-1, true, InitialMediaCountToLoad, $" {Utilities.UserUtils.GetFriendsSql(Utilities.UserUtils.CurrentUser)} ORDER BY DateAdded DESC", true,"",0);
+            FeedList = PlayedGameList.LoadGame(-1, true, InitialMediaCountToLoad, $" {Utilities.UserUtils.GetFriendsSql(Utilities.UserUtils.CurrentUser)} ORDER BY DateAdded DESC", true,"",0,0);
             if (FeedList.Count > 0)
             {
                 LatestPlayedKey = FeedList[0].PlayedKey;
@@ -73,7 +73,7 @@ namespace DesktopUI.TabVMs
 
             var sql = $" AND DateAdded > '{LatestDateAdded}' {Utilities.UserUtils.GetFriendsSql(currentUser)} ORDER BY DateAdded DESC";
             var newEntries = new PlayedGameList();
-            newEntries = PlayedGameList.LoadGame(-1, true, -1, sql, true,"",0);
+            newEntries = PlayedGameList.LoadGame(-1, true, -1, sql, true,"",0,0);
 
             for (int i = newEntries.Count - 1; i >= 0; i--)
             {

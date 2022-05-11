@@ -111,7 +111,7 @@ namespace GameBL
             return fmList;
         }
 
-        public static PlayedGameList LoadFromMemory(bool onlyBeaten, string year, int platformKey, bool playedOnIsChecked)
+        public static PlayedGameList LoadFromMemory(bool onlyBeaten, string year, int platformKey, bool playedOnIsChecked, int genreKey)
         {
             var list = new List<PlayedGame>();
             var pmList = new PlayedGameList();
@@ -127,6 +127,8 @@ namespace GameBL
                 if (year.ToLower() != "<all>")
                     list = list.Where(x => x.DateAdded.Year == Convert.ToInt32(year)).ToList();
 
+                if (genreKey > 0)
+                    list = list.Where(x => x.MatchingMedia.Genre1 == genreKey || x.MatchingMedia.Genre2 == genreKey).ToList();
 
                 if (platformKey > 0)
                 {
@@ -134,8 +136,6 @@ namespace GameBL
                         list = list.Where(x => x.PlatformPlayedOn == platformKey).ToList();
                     else
                         list = list.Where(x => x.MatchingMedia.Platform == platformKey).ToList();
-
-
                 }
             }
 
@@ -148,7 +148,7 @@ namespace GameBL
             return pmList;
         }
 
-        public static PlayedGameList LoadGame(int userKey, bool excludePrivate, int selectTop, string endingSqlString, bool onlyBeaten, string year, int plat)
+        public static PlayedGameList LoadGame(int userKey, bool excludePrivate, int selectTop, string endingSqlString, bool onlyBeaten, string year, int plat, int genreKey)
         {
 
             var list = new List<PlayedGame>();

@@ -21,6 +21,7 @@ namespace DesktopUI.TabVMs
         public string RemoveFriendString => "Remove Friend";
 
         public List<Platform> PlatformList { get; set; }
+        public List<Genre> GenreList { get; set; }
         public List<string> YearList { get; set; }
         public ObservableCollection<Stat> PlatformPlayedStats { get; set; }
         public ObservableCollection<Stat> GenresPlayedStats { get; set; }
@@ -105,6 +106,14 @@ namespace DesktopUI.TabVMs
             set { selectedPlatform = value; OnPropertyChanged("SelectedPlatform"); }
         }
 
+        private Genre selectedGenre;
+        public Genre SelectedGenre
+        {
+            get { return selectedGenre; }
+            set { selectedGenre = value; OnPropertyChanged("SelectedGenre"); }
+        }
+
+
         private bool showKeys;
         public bool ShowKeys
         {
@@ -132,6 +141,19 @@ namespace DesktopUI.TabVMs
             PlatformList = LoadedData.PlatformListWithAll;
             if (PlatformList.Count > 0)
                 SelectedPlatform = PlatformList[0];
+
+            GenreList = new List<Genre>();
+            var allGen = new Genre();
+            allGen.GenreKey = 0;
+            allGen.GenreName = "<All>";
+            GenreList.Add(allGen);
+
+            for (int i = 0; i < Globals.GenreList.Count; i++)
+            {
+                GenreList.Add(Globals.GenreList[i]);
+            }
+            SelectedGenre = GenreList[0];
+
 
             YearList = new List<string>();
             YearList.Add("<All>");
@@ -164,9 +186,9 @@ namespace DesktopUI.TabVMs
             
             var userKey = SelectedUser.UserKey;
             if (userKey == Utilities.UserUtils.CurrentUser.UserKey)
-                PlayedGameList = PlayedGameList.LoadFromMemory(OnlyBeatenGames, SelectedYear, SelectedPlatform.PlatformKey, PlayedOnIsChecked);
+                PlayedGameList = PlayedGameList.LoadFromMemory(OnlyBeatenGames, SelectedYear, SelectedPlatform.PlatformKey, PlayedOnIsChecked, SelectedGenre.GenreKey);
             else
-                PlayedGameList = PlayedGameList.LoadGame(userKey, true, -1, " ORDER BY DateAdded DESC", OnlyBeatenGames, SelectedYear, SelectedPlatform.PlatformKey);
+                PlayedGameList = PlayedGameList.LoadGame(userKey, true, -1, " ORDER BY DateAdded DESC", OnlyBeatenGames, SelectedYear, SelectedPlatform.PlatformKey, SelectedGenre.GenreKey);
 
             // STATS
             MediaCount = PlayedGameList.Count;

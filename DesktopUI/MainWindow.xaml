@@ -300,7 +300,8 @@
                         <ComboBox Margin="15,0,0,0" Width="120" ItemsSource="{Binding PlatformList}" SelectedItem="{Binding SelectedPlatform}" DisplayMemberPath="Name"/>
                         <CheckBox Content="Played On" VerticalAlignment="Center" Margin="2,0,0,0" IsChecked="{Binding PlayedOnIsChecked}"/>
 
-                        <ComboBox Margin="35,0,0,0" Width="80" ItemsSource="{Binding YearList}" SelectedValue="{Binding SelectedYear}" />
+                        <ComboBox Margin="15,0,0,0" Width="80" ItemsSource="{Binding YearList}" SelectedValue="{Binding SelectedYear}" />
+                        <ComboBox Margin="10,0,0,0" Width="100" ItemsSource="{Binding GenreList}" SelectedValue="{Binding SelectedGenre}" DisplayMemberPath="GenreName" />
                         <Button Content="Refresh" Margin="30,0,0,0" Command="{Binding RefreshCommand}" />
 
                     </StackPanel>
@@ -320,7 +321,7 @@
                             <DataGridTextColumn Header="Name" Width="290" Binding="{Binding MatchingMedia.Name}" />
                             <DataGridTextColumn Header="Version" Width="80" Binding="{Binding MatchingMedia.Platform, Converter={StaticResource PlatformKeyToNameConverter}}" />
                             <DataGridTextColumn Header="Genre" Width="75" Binding="{Binding MatchingMedia.Genre1, Converter={StaticResource GenreKeyToNameConverter}}" />
-                            <!--<DataGridTextColumn Header="Genre" Width="75" Binding="{Binding MatchingMedia.Genre2, Converter={StaticResource GenreKeyToNameConverter}}" />-->
+                            <DataGridTextColumn Header="Genre" Width="75" Binding="{Binding MatchingMedia.Genre2, Converter={StaticResource GenreKeyToNameConverter}}" />
                             <DataGridTextColumn Header="H" Width="30" Binding="{Binding Hours}" />
 
                             <DataGridTextColumn Header="Year" Width="45" Binding="{Binding DateAdded, Converter={StaticResource DateTimeConverter}, ConverterParameter=4}" />

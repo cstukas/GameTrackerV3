@@ -25,7 +25,7 @@ namespace GameBL
         public static void Load(int userKey)
         {
             MyPlayedGames = new PlayedGameList();
-            MyPlayedGames = PlayedGameList.LoadGame(userKey, false, -1, " ORDER BY DateAdded DESC", false,"",0);
+            MyPlayedGames = PlayedGameList.LoadGame(userKey, false, -1, " ORDER BY DateAdded DESC", false,"",0,0);
 
             var percs = DataAccess.DBFunctions.LoadList<Percentages>("SELECT * FROM Percentages;");
             PercentageList = new List<Percentages>();
