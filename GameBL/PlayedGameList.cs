@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;
 
 namespace GameBL
 {
+    [Serializable]
     public class PlayedGameList : ObservableCollection<PlayedGame>
     {
 

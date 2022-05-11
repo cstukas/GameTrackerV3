@@ -24,6 +24,7 @@ namespace GameBL
 
     }
 
+    [Serializable]
     public class PlayedGame : Utilities.BaseClasses.NotifyPropertyChanged
     {
         #region DB Properties

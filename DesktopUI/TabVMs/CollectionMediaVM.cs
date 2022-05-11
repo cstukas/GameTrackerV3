@@ -123,7 +123,7 @@ namespace DesktopUI.TabVMs
                     }
                 }
 
-                MediaCount = DisplayCollectionList.Count;
+                UpdateStats(DisplayCollectionList);
 
             }
         }
@@ -247,10 +247,10 @@ namespace DesktopUI.TabVMs
             }
 
             DisplayCollectionList = Utilities.General.CloneList(CollectionMediaList);
-            MediaCount = DisplayCollectionList.Count;
 
-            YearReleasedStats = UpdateYearReleasedStats(DisplayCollectionList);
-            OnPropertyChanged("YearReleasedStats");
+
+            UpdateStats(DisplayCollectionList);
+
 
         }
 
@@ -259,6 +259,13 @@ namespace DesktopUI.TabVMs
             OnPropertyChanged("EntireCollection");
             OnPropertyChanged("CollectionMediaList");
             OnPropertyChanged("DisplayCollectionList");
+        }
+
+        public void UpdateStats(CollectionGameList gameList)
+        {
+            MediaCount = gameList.Count;
+            YearReleasedStats = UpdateYearReleasedStats(gameList);
+            OnPropertyChanged("YearReleasedStats");
         }
 
         public ObservableCollection<Stat> UpdateYearReleasedStats(CollectionGameList games)

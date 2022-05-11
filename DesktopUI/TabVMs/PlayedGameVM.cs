@@ -68,6 +68,13 @@ namespace DesktopUI.TabVMs
             set { playedGameList = value; OnPropertyChanged("PlayedGameList"); }
         }
 
+        private PlayedGameList displayPlayedGameList;
+        public PlayedGameList DisplayPlayedGameList
+        {
+            get { return displayPlayedGameList; }
+            set { displayPlayedGameList = value; OnPropertyChanged("DisplayPlayedGameList"); }
+        }
+
         private string addRemoveFriendString;
         public string AddRemoveFriendString
         {
@@ -128,6 +135,37 @@ namespace DesktopUI.TabVMs
             set { playedOnIsChecked = value; OnPropertyChanged("PlayedOnIsChecked"); }
         }
 
+
+        private string gameFilterText;
+        public string GameFilterText
+        {
+            get { return gameFilterText; }
+            set
+            {
+                gameFilterText = value;
+                OnPropertyChanged("GameFilterText");
+
+                DisplayPlayedGameList.Clear();
+
+                for (int i = 0; i < PlayedGameList.Count; i++)
+                {
+                    var pg = PlayedGameList[i];
+
+                    var good = pg.MatchingMedia.Name.ToLower().StartsWith(GameFilterText.ToLower());
+
+                    if (good)
+                    {
+                        DisplayPlayedGameList.Add(pg);
+                    }
+                }
+
+                UpdateStats(DisplayPlayedGameList);
+
+
+
+            }
+        }
+
         public PlayedGameVM(MainVM parentVM)
             : base(parentVM)
         {
@@ -164,6 +202,7 @@ namespace DesktopUI.TabVMs
             SelectedYear = YearList[0];
 
             ShowKeys = false;
+
         }
 
         private void OnEditSelected(object obj)
@@ -183,26 +222,36 @@ namespace DesktopUI.TabVMs
 
         public void RefreshData(bool onlyFriends = false)
         {
-            
+            GameFilterText = "";
             var userKey = SelectedUser.UserKey;
             if (userKey == Utilities.UserUtils.CurrentUser.UserKey)
                 PlayedGameList = PlayedGameList.LoadFromMemory(OnlyBeatenGames, SelectedYear, SelectedPlatform.PlatformKey, PlayedOnIsChecked, SelectedGenre.GenreKey);
             else
                 PlayedGameList = PlayedGameList.LoadGame(userKey, true, -1, " ORDER BY DateAdded DESC", OnlyBeatenGames, SelectedYear, SelectedPlatform.PlatformKey, SelectedGenre.GenreKey);
 
-            // STATS
-            MediaCount = PlayedGameList.Count;
+            DisplayPlayedGameList = Utilities.General.CloneList(PlayedGameList);
 
-            PlatformPlayedStats = UpdatePlayedStats(PlayedGameList);
+            // STATS
+            UpdateStats(DisplayPlayedGameList);
+
+        
+        }
+
+        public void UpdateStats(PlayedGameList gameList)
+        {
+            MediaCount = gameList.Count;
+
+            PlatformPlayedStats = UpdatePlayedStats(gameList);
             OnPropertyChanged("PlatformPlayedStats");
 
-            GenresPlayedStats = UpdateGenreStats(PlayedGameList);
+            GenresPlayedStats = UpdateGenreStats(gameList);
             OnPropertyChanged("GenresPlayedStats");
 
-            UpdateGapStats(PlayedGameList);
+            UpdateGapStats(gameList);
 
-            TopMonthsStats = UpdateMonthStats(PlayedGameList);
+            TopMonthsStats = UpdateMonthStats(gameList);
             OnPropertyChanged("TopMonthsStats");
+
 
         }
 
@@ -218,6 +267,7 @@ namespace DesktopUI.TabVMs
         {
             SelectedUser = user;
             PlayedGameList = new PlayedGameList();
+            DisplayPlayedGameList = new PlayedGameList();
 
             // Check if we are friends
             if (SelectedUser != null)
@@ -268,10 +318,6 @@ namespace DesktopUI.TabVMs
                     platforms.Add(game.MatchingMedia.Platform);
                 }
             }
-
-
-
-
 
             // loop platforms and get stats
             var stats = new List<Stat>();

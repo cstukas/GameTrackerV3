@@ -285,13 +285,12 @@
 
                     <Grid.RowDefinitions>
                         <RowDefinition Height="25"/>
+                        <RowDefinition Height="auto"/>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="25"/>
                     </Grid.RowDefinitions>
 
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Grid.ColumnSpan="2" Margin="0,2" >
-
-
                         <TextBlock Text="{Binding SelectedUser.UserName}" FontWeight="Bold" FontSize="16" Margin="0,0,0,0"/>
                         <TextBlock Text="{Binding MediaCount}" FontWeight="Normal" Margin="15,0,0,0" FontSize="14" VerticalAlignment="Center" Width="40"/>
 
@@ -310,9 +309,12 @@
                                 Content="{Binding AddRemoveFriendString}" Command="{Binding AddRemoveFriendCommand}" 
                                 Width="90" FontSize="10" Margin="2,3,2,3" HorizontalAlignment="Right" Grid.Column="2"/>
 
+                    <TextBox Grid.Row="1" Margin="0,0,0,2" Height="22" VerticalContentAlignment="Center" FontSize="16"
+                             Text="{Binding GameFilterText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
-                    <DataGrid ItemsSource="{Binding PlayedGameList}" SelectedItem="{Binding SelectedPlayedGame}"  SelectionMode="Single"
-                              IsReadOnly="True" Grid.Row="1" AutoGenerateColumns="False" Grid.ColumnSpan="1">
+
+                    <DataGrid ItemsSource="{Binding DisplayPlayedGameList}" SelectedItem="{Binding SelectedPlayedGame}"  SelectionMode="Single"
+                              IsReadOnly="True" Grid.Row="2" AutoGenerateColumns="False" Grid.ColumnSpan="1">
                         <DataGrid.InputBindings>
                             <MouseBinding Gesture="LeftDoubleClick" Command="{Binding MediaClickedCommand}"/>
                         </DataGrid.InputBindings>
@@ -321,7 +323,7 @@
                             <DataGridTextColumn Header="Name" Width="290" Binding="{Binding MatchingMedia.Name}" />
                             <DataGridTextColumn Header="Version" Width="80" Binding="{Binding MatchingMedia.Platform, Converter={StaticResource PlatformKeyToNameConverter}}" />
                             <DataGridTextColumn Header="Genre" Width="75" Binding="{Binding MatchingMedia.Genre1, Converter={StaticResource GenreKeyToNameConverter}}" />
-                            <DataGridTextColumn Header="Genre" Width="75" Binding="{Binding MatchingMedia.Genre2, Converter={StaticResource GenreKeyToNameConverter}}" />
+                            <!--<DataGridTextColumn Header="Genre" Width="75" Binding="{Binding MatchingMedia.Genre2, Converter={StaticResource GenreKeyToNameConverter}}" />-->
                             <DataGridTextColumn Header="H" Width="30" Binding="{Binding Hours}" />
 
                             <DataGridTextColumn Header="Year" Width="45" Binding="{Binding DateAdded, Converter={StaticResource DateTimeConverter}, ConverterParameter=4}" />
@@ -353,7 +355,7 @@
                         </DataGrid.Columns>
                     </DataGrid>
 
-                    <TabControl Grid.Column="1" Grid.Row="1" Margin="2,5,2,0">
+                    <TabControl Grid.Column="1" Grid.Row="1" Margin="2,5,2,0" Grid.RowSpan="2">
                         <TabItem Header="Consoles"  Width="50" FontSize="9">
                             <ListBox ItemsSource="{Binding PlatformPlayedStats}"  FontSize="11">
                                 <ListBox.ItemTemplate>
@@ -425,7 +427,7 @@
                     </TabControl>
 
 
-                    <Button Content="Edit Selected" Grid.Row="2" Width="85" FontSize="12" Command="{Binding EditSelectedCommand}"
+                    <Button Content="Edit Selected" Grid.Row="3" Width="85" FontSize="12" Command="{Binding EditSelectedCommand}"
                             HorizontalAlignment="Left" Margin="2,2,0,2"/>
 
                 </Grid>
