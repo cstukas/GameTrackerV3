@@ -115,7 +115,7 @@ namespace DesktopUI
             }
 
 
-            OnlyShowMine = false;
+            OnlyShowMine = true;
 
             WindowTitle = "";
         }
