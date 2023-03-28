@@ -507,25 +507,27 @@
 
                     </StackPanel>
 
-                    <StackPanel Visibility="Hidden" Grid.Row="1" Grid.RowSpan="2" Grid.Column="3" Orientation="Vertical" VerticalAlignment="Bottom" Margin="44,0,40,0" HorizontalAlignment="Center">
-                        <TextBlock Text="Beat" HorizontalAlignment="Center" FontSize="24" FontWeight="Bold" Margin="5"/>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding SelectedSeries.GamesBeat}" HorizontalAlignment="Center" FontSize="22" Margin="5"/>
-                            <TextBlock Text="{Binding SelectedSeries.BeatPercentage}" HorizontalAlignment="Center" FontSize="22" Margin="5"/>
-
+                    <StackPanel Visibility="Hidden" Grid.Row="1" Grid.RowSpan="2" Grid.Column="3" Orientation="Vertical" VerticalAlignment="Top" Margin="0,70,0,0" HorizontalAlignment="Center">
+                        <TextBlock Text="Total" HorizontalAlignment="Center" FontSize="18" FontWeight="Bold" Margin="0,15,0,0"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5,5,5,0">
+                            <TextBlock Text="{Binding TotalGames}" HorizontalAlignment="Center" FontSize="18" />
                         </StackPanel>
 
-                        <TextBlock Text="Own" HorizontalAlignment="Center" FontSize="24" FontWeight="Bold" Margin="5,30,5,5"/>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding SelectedSeries.GamesOwned}" HorizontalAlignment="Center" FontSize="22" Margin="5"/>
-                            <TextBlock Text="{Binding SelectedSeries.OwnPercentage}" HorizontalAlignment="Center" FontSize="22" Margin="5"/>
+                        <TextBlock Text="Beat" HorizontalAlignment="Center" FontSize="18" FontWeight="Bold" Margin="0,15,0,0"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5,5,5,0">
+                            <TextBlock Text="{Binding GamesBeat}" HorizontalAlignment="Center" FontSize="18" />
+                            <TextBlock Text="{Binding BeatPercentage}" HorizontalAlignment="Center" FontSize="18" Margin="10,0,0,0"/>
+                            <TextBlock Text="%" HorizontalAlignment="Center" FontSize="18"/>
                         </StackPanel>
 
-                        <TextBlock Text="Total" HorizontalAlignment="Center" FontSize="24" FontWeight="Bold" Margin="5,30,5,5"/>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding SelectedSeries.TotalGames}" HorizontalAlignment="Center" FontSize="22" Margin="5"/>
-                        </StackPanel>
 
+                        <TextBlock Text="Own" HorizontalAlignment="Center" FontSize="18" FontWeight="Bold" Margin="0,15,0,0"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5,5,5,0">
+                            <TextBlock Text="{Binding GamesOwn}" HorizontalAlignment="Center" FontSize="18" />
+                            <TextBlock Text="{Binding OwnPercentage}" HorizontalAlignment="Center" FontSize="18" Margin="10,0,0,0"/>
+                            <TextBlock Text="%" HorizontalAlignment="Center" FontSize="18"/>
+                        </StackPanel>
+                        
                     </StackPanel>
 
                     <StackPanel Grid.Row="4" Margin="5,1" VerticalAlignment="Center" Grid.ColumnSpan="3">

@@ -46,6 +46,9 @@ namespace DesktopUI.TabVMs
 
                 SeriesPlayedGames.Clear();
 
+                int beatCount = 0;
+                int ownCount = 0;
+
                 var allSeriesGames = new List<Game>();
 
                 for (int k = 0; k < seriesGames.Count; k++)
@@ -56,6 +59,7 @@ namespace DesktopUI.TabVMs
                     foreach (var item in otherVersions)
                     {
                         allSeriesGames.Add(item);
+                       
                     }
                 }
 
@@ -66,7 +70,9 @@ namespace DesktopUI.TabVMs
                     var pGames = LoadedData.MyPlayedGames.Where(x => x.GameKey == asGame.GameKey).ToList();
                     for (int j = 0; j < pGames.Count; j++)
                     {
-                        allGames.Add(pGames[j]);
+                        var pgame = pGames[j];
+                        allGames.Add(pgame);
+                        if (pgame.Beaten == 1) beatCount++;
                     }
 
                 }
@@ -76,7 +82,16 @@ namespace DesktopUI.TabVMs
                 {
                     SeriesPlayedGames.Add(allGames[j]);
                 }
-            
+
+                TotalGames = seriesGames.Count;
+
+                GamesBeat = beatCount;
+                BeatPercentage = (beatCount / totalGames) ;
+                OnPropertyChanged("BeatPercentage");
+
+
+
+
             }
         }   
 
@@ -94,6 +109,40 @@ namespace DesktopUI.TabVMs
             set { selectedSeriesGame = value; OnPropertyChanged("SelectedSeriesGame"); }
         }
 
+        private int gamesBeat;
+        public int GamesBeat
+        {
+            get { return gamesBeat; }
+            set { gamesBeat = value; OnPropertyChanged("GamesBeat"); }
+        }
+
+        private int gamesOwn;
+        public int GamesOwn
+        {
+            get { return gamesOwn; }
+            set { gamesOwn = value; OnPropertyChanged("GamesOwn"); }
+        }
+
+        private double beatPercentage;
+        public double BeatPercentage
+        {
+            get { return beatPercentage; }
+            set { beatPercentage = value; OnPropertyChanged("BeatPercentage"); }
+        }
+
+        private double ownPercentage;
+        public double OwnPercentage
+        {
+            get { return ownPercentage; }
+            set { ownPercentage = value; OnPropertyChanged("OwnPercentage"); }
+        }
+
+        private int totalGames;
+        public int TotalGames
+        {
+            get { return totalGames; }
+            set { totalGames = value; OnPropertyChanged("TotalGames"); }
+        }
 
 
         //******************************************
