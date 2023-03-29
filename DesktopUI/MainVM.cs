@@ -610,26 +610,36 @@ namespace DesktopUI
 
         public void OpenAddToPlayedWindow(PlayedGame game = null)
         {
-            Stats.UpdateStats = false;
-            var window = new AddToPlayedWindow(this, game);
-            window.ShowDialog();
-
-            if (Globals.RefreshPlayed && SelectedTabIndex == (int)MenuTabs.PlayedGames)
+            try
             {
-                PlayedVM.RefreshData();
+                Stats.UpdateStats = false;
+                var window = new AddToPlayedWindow(this, game);
+                window.ShowDialog();
+
+                if (Globals.RefreshPlayed && SelectedTabIndex == (int)MenuTabs.PlayedGames)
+                {
+                    PlayedVM.RefreshData();
+                }
+
+                if (Globals.RefreshPlayed && SelectedTabIndex == (int)MenuTabs.Feed)
+                {
+                    FeedVM.UpdateFeed();
+                }
+
+                Globals.RefreshPlayed = false;
+
+                if (Stats.UpdateStats)
+                    UpdateStats();
+
+                Mouse.OverrideCursor = null;
+            }
+            catch (Exception)
+            {
+
+                Mouse.OverrideCursor = null;
+
             }
 
-            if (Globals.RefreshPlayed && SelectedTabIndex == (int)MenuTabs.Feed)
-            {
-                FeedVM.UpdateFeed();
-            }
-
-            Globals.RefreshPlayed = false;
-
-            if (Stats.UpdateStats)
-                UpdateStats();
-
-            Mouse.OverrideCursor = null;
         }
 
  
